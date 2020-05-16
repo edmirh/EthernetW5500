@@ -1,0 +1,50 @@
+#include "spi.c"
+
+///SPI1 Peripheral on APB2 Bus
+//SPI1_NSS -> PA15
+//SPI1_SCK -> PB3
+//SPI1_MISO -> PB4
+//SPI1_MOSI -> PB5
+
+void initSPI(uint16_t prescaler) {
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+	
+	GPIOB->MODER |= (GPIO_MODER_MODER3_1)|(GPIO_MODER_MODER4_1)|(GPIO_MODER_MODER5_1);
+	GPIOB->OTYPER |= 0x00000000;
+	GPIOB->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR3_1)|(GPIO_OSPEEDER_OSPEEDR4_1)|(GPIO_OSPEEDER_OSPEEDR5_1);
+	GPIOB->AFR[0] |= 0x00555000;
+	
+	GPIOA->MODER |= GPIO_MODER_MODER15_0;
+	GPIOA->OTYPER |= ~(0x80000000);
+	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR15_1;
+	
+	SPI_HIGH;
+	
+	RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+	SPI1->CR1 |= ~(SPI_CR1_DFF);
+	
+	SPI1->CR1 |= (SPI_CR1_MSTR);
+	SPI1->CR1 |= (SPI_CR1_SSI)|(SPI_CR1_SSM);
+	
+	SPI1->CR1 = prescaler;
+	SPI1->CR1 |= SPI_CR1_SPE;
+}
+
+uint8_t txSPI(uint8_t data) {
+	SPI1->DR |= data;
+	while(!(SPI1->SR & TXE));
+	while(!(SPI1->CR2 & TXEIE));
+	return data;
+}
+
+uint8_t rxSPI(void) {
+	uint8_t data;
+	SPI1->DR = 0x00;
+
+	while(!(SPI1->SR & SPI_SR_RXNE));
+	while(!(SPI1-CR2 & SPI_CR2_RXNEIE));
+	
+	data = SPI1->DR;
+	return data;
+}

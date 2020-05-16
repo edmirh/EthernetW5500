@@ -1,5 +1,8 @@
 #include "stm32f4xx.h"
 #include "delay.h"
+#include "w5500.h"
+#include "usart.h"
+
 
 int main() {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
@@ -8,10 +11,11 @@ int main() {
 	GPIOD->OTYPER |= 0x00000000;
 	GPIOD->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR12_1;
 	
-	uint16_t cnt = 0;
+	initUSART2(USART2_BAUDRATE_115200);
+	printUSART2("Waiting for code\n");
 	
 	while(1) {
-		delay_ms(500);
 		GPIOD->ODR ^= GPIO_ODR_ODR_12;
+		delay_ms(100);
 	}
 }

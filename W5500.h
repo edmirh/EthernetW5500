@@ -31,7 +31,9 @@
 #define PHAR		W5500_BASE + (0x001E << 8) + (W5500_CR << 3)	
 
 //Socket register block
-#define W5500_SREG(N)       (1+4*N)
+#define W5500_SREG(N)       (1+4*N)										//Socket register
+#define W5500_TXBUF_BLOCK(N)      (2+4*N) 								//Socket N Tx buffer address block
+#define W5500_RXBUF_BLOCK(N)      (3+4*N) 								//Socket N Rx buffer address block
 #define Sn_MR(N)	W5500_BASE + (0x0000 << 8) + (W5500_SREG(N) << 3)	
 #define Sn_CR(N)	W5500_BASE + (0x0001 << 8) + (W5500_SREG(N) << 3)	
 #define Sn_IR(N)	W5500_BASE + (0x0002 << 8) + (W5500_SREG(N) << 3)	
@@ -51,9 +53,46 @@
 #define Sn_RX_RD(N)	W5500_BASE + (0x0028 << 8) + (W5500_SREG(N) << 3)	
 #define Sn_RX_WR(N)	W5500_BASE + (0x002A << 8) + (W5500_SREG(N) << 3)	
 #define Sn_IMR(N)	W5500_BASE + (0x002C << 8) + (W5500_SREG(N) << 3)	
-#define Sn_FRAAG(N)	W5500_BASE + (0x002D << 8) + (W5500_SREG(N) << 3)	
-#define Sn_IMR(N)	W5500_BASE + (0x002F << 8) + (W5500_SREG(N) << 3)	
+#define Sn_FRAAG(N)	W5500_BASE + (0x002D << 8) + (W5500_SREG(N) << 3)		
 #define Sn_KPALVTR(N)	W5500_BASE + (0x002C << 8) + (W5500_SREG(N) << 3)	
+#define Sn_TX_RD(N)     W5500_BASE + (0x0022 << 8) + (W5500_SREG(N) << 3)
+#define Sn_TX_WR(N)     W5500_BASE + (0x0024 << 8) + (W5500_SREG(N) << 3)
+
+#define setSn_RX_RD(sn, rxrd) { \
+		writeReg(Sn_RX_RD(sn),   (uint8_t)(rxrd>>8)); \
+		writeReg(W5500_OFFSET_INC(Sn_RX_RD(sn),1), (uint8_t) rxrd); \
+	}
+	
+#define getSn_TX_WR(sn) \
+		(((uint16_t)readReg(Sn_TX_WR(sn)) << 8) + readReg(W5500_OFFSET_INC(Sn_TX_WR(sn),1)))		
+
+#define setSn_TX_WR(sn, txwr) { \
+		writeReg(Sn_TX_WR(sn),   (uint8_t)(txwr>>8)); \
+		writeReg(W5500_OFFSET_INC(Sn_TX_WR(sn),1), (uint8_t) txwr); \
+		}
+#define setSn_CR(sn, cr) \
+		writeReg(Sn_CR(sn), cr)
+#define getSn_CR(sn) \
+		readReg(Sn_CR(sn))
+
+#define getSn_IR(sn) \
+		(readReg(Sn_IR(sn)) & 0x1F)
+
+
+#define setSn_IR(sn, ir) \
+		writeReg(Sn_IR(sn), (ir & 0x1F))
+		
+#define getSn_SR(sn) \
+		readReg(Sn_SR(sn))
+
+#define setSn_DPORT(sn, dport) { \
+		writeReg(Sn_DPORT(sn),   (uint8_t) (dport>>8)); \
+		writeReg(W5500_OFFSET_INC(Sn_DPORT(sn),1), (uint8_t)  dport); \
+	}
+	
+#define setSn_DIPR(sn, dipr) \
+		writeBuff(Sn_DIPR(sn), dipr, 4)
+
 
 //PHYCFGR register
 #define PHYCFGR            (W5500_BASE + (0x002E << 8) + (W5500_CR << 3))
@@ -74,9 +113,52 @@
 #define PHYCFGR_LNK_ON               (1<<0)
 #define PHYCFGR_LNK_OFF              (0<<0)	
 
+#define Sn_MR_TCP                    0x01
+#define Sn_CR_SEND_KEEP              0x22
+
+//Socket status
+#define SOCKET                uint8_t  ///< SOCKET type define for legacy driver
+
+#define SOCK_OK               1        ///< Result is OK about socket process.
+#define SOCK_BUSY             0        ///< Socket is busy on processing the operation. Valid only Non-block IO Mode.
+#define SOCK_FATAL            -1000    ///< Result is fatal error about socket process.
+
+#define SOCK_ERROR            0        
+#define SOCKERR_SOCKNUM       (SOCK_ERROR - 1)     ///< Invalid socket number
+#define SOCKERR_SOCKOPT       (SOCK_ERROR - 2)     ///< Invalid socket option
+#define SOCKERR_SOCKINIT      (SOCK_ERROR - 3)     ///< Socket is not initialized or SIPR is Zero IP address when Sn_MR_TCP
+#define SOCKERR_SOCKCLOSED    (SOCK_ERROR - 4)     ///< Socket unexpectedly closed.
+#define SOCKERR_SOCKMODE      (SOCK_ERROR - 5)     ///< Invalid socket mode for socket operation.
+#define SOCKERR_SOCKFLAG      (SOCK_ERROR - 6)     ///< Invalid socket flag
+#define SOCKERR_SOCKSTATUS    (SOCK_ERROR - 7)     ///< Invalid socket status for socket operation.
+#define SOCKERR_ARG           (SOCK_ERROR - 10)    ///< Invalid argument.
+#define SOCKERR_PORTZERO      (SOCK_ERROR - 11)    ///< Port number is zero
+#define SOCKERR_IPINVALID     (SOCK_ERROR - 12)    ///< Invalid IP address
+#define SOCKERR_TIMEOUT       (SOCK_ERROR - 13)    ///< Timeout occurred
+#define SOCKERR_DATALEN       (SOCK_ERROR - 14)    ///< Data length is zero or greater than buffer max size.
+#define SOCKERR_BUFFER        (SOCK_ERROR - 15)    ///< Socket buffer is not enough for data communication.
+
+#define SOCKFATAL_PACKLEN     (SOCK_FATAL - 1)     ///< Invalid packet length. Fatal Error.
+
+#define Sn_CR_OPEN                   0x01
+#define Sn_CR_CONNECT                0x04
+#define Sn_CR_DISCON                 0x08
+#define Sn_CR_CLOSE                  0x10
+#define Sn_CR_SEND                   0x20
+#define Sn_CR_RECV                   0x40
+#define SOCK_CLOSED                  0x00
+#define SOCK_INIT                    0x13
+#define SOCK_LISTEN                  0x14
+#define SOCK_ESTABLISHED             0x17
+
+#define Sn_IR_TIMEOUT                0x08
+
 void writeReg(uint32_t addr, uint8_t data);							//SPI must be LOW for transmit data
 uint8_t readReg(uint32_t addr);								//SPI must be HIGH for transmit data
 void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len);
 void readBuff(uint32_t addr, uint8_t *pBuff, uint16_t len);
+void sendData(uint8_t sn, uint8_t * data, uint16_t len);
+void recvData(uint8_t sn, uint8_t * data, uint16_t len);
+uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port);
 
 #endif

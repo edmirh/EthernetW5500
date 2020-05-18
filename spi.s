@@ -257,11 +257,13 @@ txSPI:
 	lsls	r3, r3, #24
 	bmi	.L20
 	.loc 1 55 2 is_stmt 1 view .LVU84
-	.loc 1 55 6 is_stmt 0 view .LVU85
-	ldrh	r3, [r2, #12]
+	.loc 1 55 12 is_stmt 0 view .LVU85
+	ldrh	r0, [r2, #12]
+.LVL4:
 	.loc 1 57 2 is_stmt 1 view .LVU86
 	.loc 1 58 1 is_stmt 0 view .LVU87
-	movs	r0, #0
+	uxtb	r0, r0
+	.loc 1 58 1 view .LVU88
 	bx	lr
 .L27:
 	.align	2
@@ -278,7 +280,7 @@ txSPI:
 	.file 6 "../../../STM32F407/Libraries/CMSIS/ST/STM32F4xx/Include/stm32f4xx.h"
 	.section	.debug_info,"",%progbits
 .Ldebug_info0:
-	.4byte	0x511
+	.4byte	0x519
 	.2byte	0x4
 	.4byte	.Ldebug_abbrev0
 	.byte	0x4
@@ -867,7 +869,7 @@ txSPI:
 	.4byte	.LFE112-.LFB112
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x4c4
+	.4byte	0x4cc
 	.uleb128 0xf
 	.4byte	.LASF65
 	.byte	0x1
@@ -882,6 +884,8 @@ txSPI:
 	.byte	0x31
 	.byte	0xa
 	.4byte	0x9b
+	.4byte	.LLST2
+	.4byte	.LVUS2
 	.byte	0
 	.uleb128 0xe
 	.4byte	.LASF64
@@ -893,7 +897,7 @@ txSPI:
 	.4byte	.LFE111-.LFB111
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x4f3
+	.4byte	0x4fb
 	.uleb128 0x11
 	.4byte	.LASF65
 	.byte	0x1
@@ -1168,6 +1172,10 @@ txSPI:
 	.uleb128 0xb
 	.uleb128 0x49
 	.uleb128 0x13
+	.uleb128 0x2
+	.uleb128 0x17
+	.uleb128 0x2137
+	.uleb128 0x17
 	.byte	0
 	.byte	0
 	.uleb128 0x11
@@ -1251,6 +1259,16 @@ txSPI:
 	.uleb128 0x1
 	.byte	0x50
 	.byte	0x9f
+	.4byte	0
+	.4byte	0
+.LVUS2:
+	.uleb128 .LVU86
+	.uleb128 0
+.LLST2:
+	.4byte	.LVL4-.Ltext0
+	.4byte	.LFE112-.Ltext0
+	.2byte	0x1
+	.byte	0x50
 	.4byte	0
 	.4byte	0
 .LVUS0:

@@ -52,7 +52,7 @@ uint8_t txSPI(uint8_t data)
 	while(!(SPI2->SR & SPI_I2S_FLAG_TXE));								// 
 	while(!(SPI2->SR & SPI_I2S_FLAG_RXNE)); 							// 
 	while(SPI2->SR & SPI_I2S_FLAG_BSY); 								// 
-	SPI2->DR; 													// 
+	tmp = SPI2->DR; 													// 
 		
 	return tmp;
 }

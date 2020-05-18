@@ -30,6 +30,15 @@
 #define PTIMER		W5500_BASE + (0x001C << 8) + (W5500_CR << 3)		
 #define PHAR		W5500_BASE + (0x001E << 8) + (W5500_CR << 3)	
 
+#define setGAR(gar) \
+		writeBuff(GAR,gar,4)
+#define setSUBR(subr) \
+		writeBuff(SUBR,subr,4)
+#define setSHAR(shar) \
+		writeBuff(SHAR,shar,4)
+#define setSIPR(sipr) \
+		writeBuff(SIPR,sipr,4)
+
 //Socket register block
 #define W5500_SREG(N)       (1+4*N)										//Socket register
 #define W5500_TXBUF_BLOCK(N)      (2+4*N) 								//Socket N Tx buffer address block
@@ -74,7 +83,7 @@
 		writeReg(Sn_CR(sn), cr)
 #define getSn_CR(sn) \
 		readReg(Sn_CR(sn))
-
+		
 #define getSn_IR(sn) \
 		(readReg(Sn_IR(sn)) & 0x1F)
 
@@ -89,6 +98,9 @@
 		writeReg(Sn_DPORT(sn),   (uint8_t) (dport>>8)); \
 		writeReg(W5500_OFFSET_INC(Sn_DPORT(sn),1), (uint8_t)  dport); \
 	}
+
+#define getSn_MR(sn) \
+	readReg(Sn_MR(sn))	
 	
 #define setSn_DIPR(sn, dipr) \
 		writeBuff(Sn_DIPR(sn), dipr, 4)
@@ -124,19 +136,19 @@
 #define SOCK_FATAL            -1000    ///< Result is fatal error about socket process.
 
 #define SOCK_ERROR            0        
-#define SOCKERR_SOCKNUM       (SOCK_ERROR - 1)     ///< Invalid socket number
-#define SOCKERR_SOCKOPT       (SOCK_ERROR - 2)     ///< Invalid socket option
-#define SOCKERR_SOCKINIT      (SOCK_ERROR - 3)     ///< Socket is not initialized or SIPR is Zero IP address when Sn_MR_TCP
-#define SOCKERR_SOCKCLOSED    (SOCK_ERROR - 4)     ///< Socket unexpectedly closed.
-#define SOCKERR_SOCKMODE      (SOCK_ERROR - 5)     ///< Invalid socket mode for socket operation.
-#define SOCKERR_SOCKFLAG      (SOCK_ERROR - 6)     ///< Invalid socket flag
-#define SOCKERR_SOCKSTATUS    (SOCK_ERROR - 7)     ///< Invalid socket status for socket operation.
-#define SOCKERR_ARG           (SOCK_ERROR - 10)    ///< Invalid argument.
-#define SOCKERR_PORTZERO      (SOCK_ERROR - 11)    ///< Port number is zero
-#define SOCKERR_IPINVALID     (SOCK_ERROR - 12)    ///< Invalid IP address
-#define SOCKERR_TIMEOUT       (SOCK_ERROR - 13)    ///< Timeout occurred
-#define SOCKERR_DATALEN       (SOCK_ERROR - 14)    ///< Data length is zero or greater than buffer max size.
-#define SOCKERR_BUFFER        (SOCK_ERROR - 15)    ///< Socket buffer is not enough for data communication.
+#define SOCKERR_SOCKNUM       (SOCK_ERROR + 1)     ///< Invalid socket number
+#define SOCKERR_SOCKOPT       (SOCK_ERROR + 2)     ///< Invalid socket option
+#define SOCKERR_SOCKINIT      (SOCK_ERROR + 3)     ///< Socket is not initialized or SIPR is Zero IP address when Sn_MR_TCP
+#define SOCKERR_SOCKCLOSED    (SOCK_ERROR + 4)     ///< Socket unexpectedly closed.
+#define SOCKERR_SOCKMODE      (SOCK_ERROR + 5)     ///< Invalid socket mode for socket operation.
+#define SOCKERR_SOCKFLAG      (SOCK_ERROR + 6)     ///< Invalid socket flag
+#define SOCKERR_SOCKSTATUS    (SOCK_ERROR + 7)     ///< Invalid socket status for socket operation.
+#define SOCKERR_ARG           (SOCK_ERROR + 10)    ///< Invalid argument.
+#define SOCKERR_PORTZERO      (SOCK_ERROR + 11)    ///< Port number is zero
+#define SOCKERR_IPINVALID     (SOCK_ERROR + 12)    ///< Invalid IP address
+#define SOCKERR_TIMEOUT       (SOCK_ERROR + 13)    ///< Timeout occurred
+#define SOCKERR_DATALEN       (SOCK_ERROR + 14)    ///< Data length is zero or greater than buffer max size.
+#define SOCKERR_BUFFER        (SOCK_ERROR + 15)    ///< Socket buffer is not enough for data communication.
 
 #define SOCKFATAL_PACKLEN     (SOCK_FATAL - 1)     ///< Invalid packet length. Fatal Error.
 
@@ -151,8 +163,31 @@
 #define SOCK_LISTEN                  0x14
 #define SOCK_ESTABLISHED             0x17
 
+#define _WIZCHIP_SOCK_NUM_			 8
+
+#define CHECK_SOCKNUM()   \
+   do{                    \
+      if(sn > _WIZCHIP_SOCK_NUM_) return SOCKERR_SOCKNUM;   \
+   }while(0);             \
+
+#define CHECK_SOCKMODE(mode)  \
+   do{                     \
+      if((getSn_MR(sn) & 0x0F) != mode) return SOCKERR_SOCKMODE;  \
+   }while(0);              \
+
+#define CHECK_SOCKINIT()   \
+   do{                     \
+      if((getSn_SR(sn) != SOCK_INIT)) return SOCKERR_SOCKINIT; \
+   }while(0);              \
+
+#define CHECK_SOCKDATA()   \
+   do{                     \
+      if(len == 0) return SOCKERR_DATALEN;   \
+   }while(0);   
+
 #define Sn_IR_TIMEOUT                0x08
 
+uint8_t initW5500(uint8_t * gaddr, uint8_t * subnet, uint8_t * mac, uint8_t * saddr);
 void writeReg(uint32_t addr, uint8_t data);							//SPI must be LOW for transmit data
 uint8_t readReg(uint32_t addr);								//SPI must be HIGH for transmit data
 void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len);

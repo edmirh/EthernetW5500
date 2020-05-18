@@ -7,6 +7,18 @@ static uint16_t sock_any_port = SOCK_ANY_PORT_NUM;
 static uint16_t sock_io_mode = 0;
 static uint16_t sock_is_sending = 0;
 
+uint8_t initW5500(uint8_t * gaddr, uint8_t * subnet, uint8_t * mac, uint8_t * saddr) {
+	
+	writeReg(MR, 0x22);													//Force ARP & Wake on Lan
+	
+	setGAR(gaddr);
+	setSUBR(subnet);
+	setSHAR(mac);
+	setSIPR(saddr);
+	
+	return 1;
+}
+
 uint8_t readReg(uint32_t addr) {
 	uint8_t tmp;
 	addr |= (SPI_READ)|(SPI_VDM);
@@ -44,12 +56,12 @@ void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	printUSART2("Write into buf\n");
+	//printUSART2("Write into buffer\n");
 	for(uint8_t i = 0; i<len; i++) {
 		txSPI(pBuff[i]);
-		printUSART2("%x", pBuff[i]);
+		//printUSART2("%x", pBuff[i]);
 	}
-	printUSART2("\n");
+	//printUSART2("\n");
 	SPI_HIGH;
 }
 
@@ -60,12 +72,12 @@ void readBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	printUSART2("Read buffer\n");
+	//printUSART2("Read buffer\n");
 	for(uint8_t i = 0; i<len; i++) {
 		pBuff[i] = rxSPI();
-		printUSART2("%c", pBuff[i]);
+		//printUSART2("%c", pBuff[i]);
 	}
-	printUSART2("\n");
+	//printUSART2("\n");
 	SPI_HIGH;
 }
 
@@ -98,7 +110,6 @@ uint16_t getSn_RX_RSR(uint8_t sn) {
 }
 
 void sendData(uint8_t sn, uint8_t * data, uint16_t len) {
-	
 	uint16_t ptr = 0;
 	uint32_t addrsel = 0;
 	
@@ -128,27 +139,17 @@ void recvData(uint8_t sn, uint8_t * data, uint16_t len) {
 
 uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
 {
-   //CHECK_SOCKNUM();
-   //CHECK_SOCKMODE(Sn_MR_TCP);
-   //CHECK_SOCKINIT();
-   //M20140501 : For avoiding fatal error on memory align mismatched
-   //if( *((uint32_t*)addr) == 0xFFFFFFFF || *((uint32_t*)addr) == 0) return SOCKERR_IPINVALID;
-   {
-      uint32_t taddr;
-      taddr = ((uint32_t)addr[0] & 0x000000FF);
-      taddr = (taddr << 8) + ((uint32_t)addr[1] & 0x000000FF);
-      taddr = (taddr << 8) + ((uint32_t)addr[2] & 0x000000FF);
-      taddr = (taddr << 8) + ((uint32_t)addr[3] & 0x000000FF);
-      if( taddr == 0xFFFFFFFF || taddr == 0) return SOCKERR_IPINVALID;
-   }
-   //
-	
+   CHECK_SOCKNUM();
+   CHECK_SOCKMODE(Sn_MR_TCP);
+   CHECK_SOCKINIT();
+   
 	if(port == 0) return SOCKERR_PORTZERO;
 	setSn_DIPR(sn,addr);
 	setSn_DPORT(sn,port);
 	setSn_CR(sn,Sn_CR_CONNECT);
    while(getSn_CR(sn));
    if(sock_io_mode & (1<<sn)) return SOCK_BUSY;
+   
    while(getSn_SR(sn) != SOCK_ESTABLISHED)
    {
 		if (getSn_IR(sn) & Sn_IR_TIMEOUT)

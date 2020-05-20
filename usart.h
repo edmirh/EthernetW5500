@@ -13,6 +13,7 @@
 
 void initUSART2(uint32_t baudrate);
 void putcharUSART2(uint8_t data);
+uint8_t getcharUSART2(void);
 void printUSART2(char * str, ... );
 void sprintUSART2(uint8_t * str);
 

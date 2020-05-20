@@ -178,6 +178,7 @@
 #define Sn_CR_CLOSE                  0x10
 #define Sn_CR_SEND                   0x20
 #define Sn_CR_RECV                   0x40
+
 #define SOCK_CLOSED                  0x00
 #define SOCK_INIT                    0x13
 #define SOCK_LISTEN                  0x14

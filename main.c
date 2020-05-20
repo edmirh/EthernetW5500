@@ -23,25 +23,32 @@ int main(void) {
 	uint16_t port = 5000;
 	
 	///------------Variables for main program------------------------///
-	int tmp, init = 0;
-	int sendStatus = 0;
-	uint8_t getPort = 0;
-	uint8_t addBuff[4] = {0,0,0,0};
 	#define LENGTH		2048
+	uint16_t i = 0;
+	uint8_t status = 0x00;
+	uint8_t sendD[LENGTH];
 	
-	uint8_t sendD[LENGTH] = "HTTP/1.1 200 OK Content-Type: text/html <!DOCTYPE HTML> <html> Welcome to the new page </html>";
-	uint8_t recvD[LENGTH];
-	
-	init = initW5500(gaddr, subnet, mac, saddr);
+	initW5500(gaddr, subnet, mac, saddr);
 	setSn_PORT(sn, port);
-	tmp = connect(sn, addr, port);
+	//send(sn, sendD, 100);
 	
-	sendStatus = send(sn, sendD, 100);
-	recvData(sn, recvD, 100);
-	getSn_DIPR(sn, addBuff);
-	getPort = getSn_PORT(sn);
-	printUSART2("Status Reg: %x\n", init);
-	printUSART2("Connection: %d\n", tmp);
-	printUSART2("Send status: %d, DIPR: %d, PORT: %d\n", sendStatus, addBuff[3], getPort);
+	printUSART2("Connecting to %d.%d.%d.%d\n", addr[0], addr[1], addr[2], addr[3]);
+	status = connect(sn, addr, port);
+	if(status == 0x01) {
+		printUSART2("Connection: Established\n");		
+		while(1) {
+			sendD[i] = getcharUSART2();
+			putcharUSART2(sendD[i]);
+			i++;
+			if(getcharUSART2() == '0')
+				break;
+		}
+		printUSART2("\nExit cli mode\n");
+		send(sn, sendD, i);
+		printUSART2("All data has been sent!\n");
+	}
+	else {
+		printUSART2("Not connected!\n");
+	}
 }
 

@@ -166,6 +166,8 @@ uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
 
 int8_t listen(uint8_t sn)
 {
+	setSn_MR(sn, Sn_MR_TCP);
+	setSn_CR(sn,Sn_CR_OPEN);
 	setSn_CR(sn,Sn_CR_LISTEN);
 	while(getSn_CR(sn));
    
@@ -181,10 +183,7 @@ int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
 {
    uint8_t tmp=0;
    uint16_t freesize=0;
-   
-   CHECK_SOCKNUM();
-   CHECK_SOCKMODE(Sn_MR_TCP);
-   CHECK_SOCKDATA();
+
    tmp = getSn_SR(sn);
    if(tmp != SOCK_ESTABLISHED && tmp != SOCK_CLOSE_WAIT) return SOCKERR_SOCKSTATUS;
    if( sock_is_sending & (1<<sn) )
@@ -193,8 +192,6 @@ int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
       if(tmp & Sn_IR_SENDOK)
       {
          setSn_IR(sn, Sn_IR_SENDOK);
-         //M20150401 : Typing Error
-         //#if _WZICHIP_ == 5200
          sock_is_sending &= ~(1<<sn);         
       }
       else if(tmp & Sn_IR_TIMEOUT)
@@ -221,11 +218,9 @@ int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
    sendData(sn, buf, len);
    
    setSn_CR(sn,Sn_CR_SEND);
-   /* wait to process the command... */
    while(getSn_CR(sn));
    sock_is_sending |= (1 << sn);
-   //M20150409 : Explicit Type Casting
-   //return len;
+
    return (int32_t)len;
 }
 

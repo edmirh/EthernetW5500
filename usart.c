@@ -25,6 +25,7 @@ void putcharUSART2(uint8_t data)
 	USART2->DR = data;												    
 }
 
+
 void printUSART2(char *str, ... )
 { /// print text and up to 10 arguments!
     uint8_t rstr[40];													// 33 max -> 32 ASCII for 32 bits and NULL 

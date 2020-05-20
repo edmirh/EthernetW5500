@@ -3,6 +3,8 @@
 
 #define SOCK_ANY_PORT_NUM  0xC000
 
+uint8_t  sock_pack_info[_WIZCHIP_SOCK_NUM_] = {0,};
+static uint16_t sock_remained_size[_WIZCHIP_SOCK_NUM_] = {0,0,};
 static uint16_t sock_any_port = SOCK_ANY_PORT_NUM;
 static uint16_t sock_io_mode = 0;
 static uint16_t sock_is_sending = 0;
@@ -167,3 +169,88 @@ uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
    return SOCK_OK;
 }
 
+int8_t listen(uint8_t sn)
+{
+	CHECK_SOCKNUM();
+	CHECK_SOCKMODE(Sn_MR_TCP);
+	CHECK_SOCKINIT();
+	setSn_CR(sn,Sn_CR_LISTEN);
+	while(getSn_CR(sn));
+   
+   while(getSn_SR(sn) != SOCK_LISTEN)
+   {
+         close(sn);
+         return SOCKERR_SOCKCLOSED;
+   }
+   return SOCK_OK;
+}
+
+int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
+{
+   uint8_t tmp=0;
+   uint16_t freesize=0;
+   
+   CHECK_SOCKNUM();
+   CHECK_SOCKMODE(Sn_MR_TCP);
+   CHECK_SOCKDATA();
+   tmp = getSn_SR(sn);
+   if(tmp != SOCK_ESTABLISHED && tmp != SOCK_CLOSE_WAIT) return SOCKERR_SOCKSTATUS;
+   if( sock_is_sending & (1<<sn) )
+   {
+      tmp = getSn_IR(sn);
+      if(tmp & Sn_IR_SENDOK)
+      {
+         setSn_IR(sn, Sn_IR_SENDOK);
+         //M20150401 : Typing Error
+         //#if _WZICHIP_ == 5200
+         sock_is_sending &= ~(1<<sn);         
+      }
+      else if(tmp & Sn_IR_TIMEOUT)
+      {
+         close(sn);
+         return SOCKERR_TIMEOUT;
+      }
+      else return SOCK_BUSY;
+   }
+   freesize = getSn_TxMAX(sn);
+   if (len > freesize) len = freesize; // check size not to exceed MAX size.
+   while(1)
+   {
+      freesize = getSn_TX_FSR(sn);
+      tmp = getSn_SR(sn);
+      if ((tmp != SOCK_ESTABLISHED) && (tmp != SOCK_CLOSE_WAIT))
+      {
+         close(sn);
+         return SOCKERR_SOCKSTATUS;
+      }
+      if( (sock_io_mode & (1<<sn)) && (len > freesize) ) return SOCK_BUSY;
+      if(len <= freesize) break;
+   }
+   sendData(sn, buf, len);
+   
+   setSn_CR(sn,Sn_CR_SEND);
+   /* wait to process the command... */
+   while(getSn_CR(sn));
+   sock_is_sending |= (1 << sn);
+   //M20150409 : Explicit Type Casting
+   //return len;
+   return (int32_t)len;
+}
+
+int8_t close(uint8_t sn)
+{
+	CHECK_SOCKNUM();
+	setSn_CR(sn,Sn_CR_CLOSE);
+   /* wait to process the command... */
+	while( getSn_CR(sn) );
+	/* clear all interrupt of the socket. */
+	setSn_IR(sn, 0xFF);
+	//A20150401 : Release the sock_io_mode of socket n.
+	sock_io_mode &= ~(1<<sn);
+	//
+	sock_is_sending &= ~(1<<sn);
+	sock_remained_size[sn] = 0;
+	sock_pack_info[sn] = 0;
+	while(getSn_SR(sn) != SOCK_CLOSED);
+	return SOCK_OK;
+}

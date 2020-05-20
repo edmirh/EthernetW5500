@@ -26,29 +26,27 @@ int main(void) {
 	///------------Variables for main program------------------------///
 	int tmp, init = 0;
 	
-	#define LENGTH		2048
+	#define LENGTH		12
 	
-	uint8_t sendD[LENGTH] = "HTTP/1.1 200 OK Content-Type: text/html <!DOCTYPE HTML> <html> nesto </html>";
-	uint8_t recvD[LENGTH];
+	uint8_t send[LENGTH] = "Hello World!";
+	uint8_t recv[LENGTH];
 	
 	init = initW5500(gaddr, subnet, mac, saddr);
-	//tmp = connect(sn, addr, port);
-	tmp = listen(sn);
+	tmp = connect(sn, addr, port);
 	
-	send(sn, sendD, 12);
-	recvData(sn, recvD, 12);
+	sendData(sn, send, 12);
+	recvData(sn, recv, 12);
 	printUSART2("Status Reg: %x\n", init);
 	printUSART2("Connection: %d\n", tmp);
 	printUSART2("Send data: ");
 	for(uint8_t i=0;i<(LENGTH);i++) {
-		printUSART2("%c", sendD[i]);
+		printUSART2("%c", send[i]);
 	}
 	printUSART2("\n");
 
 	printUSART2("Recieve data: ");
 	for(uint8_t i=0;i<(LENGTH);i++) {
-		printUSART2("%c", recvD[i]);
+		printUSART2("%c", recv[i]);
 	}
 	printUSART2("\n");
 }
-

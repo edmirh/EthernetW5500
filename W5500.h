@@ -66,6 +66,7 @@
 #define Sn_KPALVTR(N)	W5500_BASE + (0x002C << 8) + (W5500_SREG(N) << 3)	
 #define Sn_TX_RD(N)     W5500_BASE + (0x0022 << 8) + (W5500_SREG(N) << 3)
 #define Sn_TX_WR(N)     W5500_BASE + (0x0024 << 8) + (W5500_SREG(N) << 3)
+#define Sn_TXBUF_SIZE(N)   (W5500_BASE + (0x001F << 8) + (W5500_SREG(N) << 3))
 
 #define setSn_RX_RD(sn, rxrd) { \
 		writeReg(Sn_RX_RD(sn),   (uint8_t)(rxrd>>8)); \
@@ -105,6 +106,11 @@
 #define setSn_DIPR(sn, dipr) \
 		writeBuff(Sn_DIPR(sn), dipr, 4)
 
+#define getSn_TXBUF_SIZE(sn) \
+		readReg(Sn_TXBUF_SIZE(sn))
+
+#define getSn_TxMAX(sn) \
+		(((uint16_t)getSn_TXBUF_SIZE(sn)) << 10)	
 
 //PHYCFGR register
 #define PHYCFGR            (W5500_BASE + (0x002E << 8) + (W5500_CR << 3))
@@ -151,8 +157,10 @@
 #define SOCKERR_BUFFER        (SOCK_ERROR + 15)    ///< Socket buffer is not enough for data communication.
 
 #define SOCKFATAL_PACKLEN     (SOCK_FATAL - 1)     ///< Invalid packet length. Fatal Error.
-
+#define Sn_IR_SENDOK                 0x10
+#define SOCK_CLOSE_WAIT              0x1C
 #define Sn_CR_OPEN                   0x01
+#define Sn_CR_LISTEN                 0x02
 #define Sn_CR_CONNECT                0x04
 #define Sn_CR_DISCON                 0x08
 #define Sn_CR_CLOSE                  0x10
@@ -195,5 +203,6 @@ void readBuff(uint32_t addr, uint8_t *pBuff, uint16_t len);
 void sendData(uint8_t sn, uint8_t * data, uint16_t len);
 void recvData(uint8_t sn, uint8_t * data, uint16_t len);
 uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port);
-
+int8_t listen(uint8_t sn);
+int8_t close(uint8_t sn);
 #endif

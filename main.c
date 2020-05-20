@@ -9,7 +9,6 @@ int main(void) {
 	GPIOD->OTYPER |= 0x00000000;
 	GPIOD->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR12_1;
 
-	
 	initUSART2(USART2_BAUDRATE_115200);
 	
 	///---------Variables for initialization, (COMMON REG)-----------///
@@ -21,34 +20,28 @@ int main(void) {
 	///--------Variables for socket connection, (SOCKET REG)---------///
 	uint8_t sn = 0x01;
 	uint8_t addr[4] = {192,168,0,119};
-	uint16_t port = 8080;
+	uint16_t port = 5000;
 	
 	///------------Variables for main program------------------------///
 	int tmp, init = 0;
-	
+	int sendStatus = 0;
+	uint8_t getPort = 0;
+	uint8_t addBuff[4] = {0,0,0,0};
 	#define LENGTH		2048
 	
-	uint8_t sendD[LENGTH] = "HTTP/1.1 200 OK Content-Type: text/html <!DOCTYPE HTML> <html> nesto </html>";
+	uint8_t sendD[LENGTH] = "HTTP/1.1 200 OK Content-Type: text/html <!DOCTYPE HTML> <html> Welcome to the new page </html>";
 	uint8_t recvD[LENGTH];
 	
 	init = initW5500(gaddr, subnet, mac, saddr);
-	//tmp = connect(sn, addr, port);
-	tmp = listen(sn);
+	setSn_PORT(sn, port);
+	tmp = connect(sn, addr, port);
 	
-	send(sn, sendD, 12);
-	recvData(sn, recvD, 12);
+	sendStatus = send(sn, sendD, 100);
+	recvData(sn, recvD, 100);
+	getSn_DIPR(sn, addBuff);
+	getPort = getSn_PORT(sn);
 	printUSART2("Status Reg: %x\n", init);
 	printUSART2("Connection: %d\n", tmp);
-	printUSART2("Send data: ");
-	for(uint8_t i=0;i<(LENGTH);i++) {
-		printUSART2("%c", sendD[i]);
-	}
-	printUSART2("\n");
-
-	printUSART2("Recieve data: ");
-	for(uint8_t i=0;i<(LENGTH);i++) {
-		printUSART2("%c", recvD[i]);
-	}
-	printUSART2("\n");
+	printUSART2("Send status: %d, DIPR: %d, PORT: %d\n", sendStatus, addBuff[3], getPort);
 }
 

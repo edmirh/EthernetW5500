@@ -38,6 +38,8 @@
 		writeBuff(SHAR,shar,4)
 #define setSIPR(sipr) \
 		writeBuff(SIPR,sipr,4)
+#define getGAR(gar) \
+		readBuff(GAR,gar,4)
 
 //Socket register block
 #define W5500_SREG(N)       (1+4*N)										//Socket register
@@ -88,7 +90,11 @@
 #define getSn_IR(sn) \
 		(readReg(Sn_IR(sn)) & 0x1F)
 
-
+#define setSn_PORT(sn, port) { \
+		writeReg(Sn_PORT(sn), (uint8_t)(port >> 8)); \
+		writeReg(W5500_OFFSET_INC(Sn_PORT(sn),1), (uint8_t) port); \
+	}
+	
 #define setSn_IR(sn, ir) \
 		writeReg(Sn_IR(sn), (ir & 0x1F))
 		
@@ -101,10 +107,16 @@
 	}
 
 #define getSn_MR(sn) \
-	readReg(Sn_MR(sn))	
+		readReg(Sn_MR(sn))	
+
+#define setSn_MR(sn, val) \
+		writeReg(Sn_MR(sn), val)
 	
 #define setSn_DIPR(sn, dipr) \
 		writeBuff(Sn_DIPR(sn), dipr, 4)
+
+#define getSn_DIPR(sn, dipr) \
+		readBuff(Sn_DIPR(sn), dipr, 4)
 
 #define getSn_TXBUF_SIZE(sn) \
 		readReg(Sn_TXBUF_SIZE(sn))
@@ -205,4 +217,5 @@ void recvData(uint8_t sn, uint8_t * data, uint16_t len);
 uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port);
 int8_t listen(uint8_t sn);
 int8_t close(uint8_t sn);
+uint16_t getSn_PORT(uint8_t sn);
 #endif

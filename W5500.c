@@ -10,9 +10,8 @@ static uint16_t sock_io_mode = 0;
 static uint16_t sock_is_sending = 0;
 
 uint8_t initW5500(uint8_t * gaddr, uint8_t * subnet, uint8_t * mac, uint8_t * saddr) {
-	
-	writeReg(MR, 0x22);													//Force ARP & Wake on Lan
-	
+	initSPI(SPI_BaudRatePrescaler_32);
+
 	setGAR(gaddr);
 	setSUBR(subnet);
 	setSHAR(mac);
@@ -24,8 +23,6 @@ uint8_t initW5500(uint8_t * gaddr, uint8_t * subnet, uint8_t * mac, uint8_t * sa
 uint8_t readReg(uint32_t addr) {
 	uint8_t tmp;
 	addr |= (SPI_READ)|(SPI_VDM);
-	
-	initSPI(SPI_BaudRatePrescaler_32);
 	
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
@@ -41,7 +38,6 @@ uint8_t readReg(uint32_t addr) {
 void writeReg(uint32_t addr, uint8_t data) {
 	addr |= (SPI_WRITE)|(SPI_VDM);
 	
-	initSPI(SPI_BaudRatePrescaler_32);
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
@@ -53,34 +49,35 @@ void writeReg(uint32_t addr, uint8_t data) {
 void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {
 	addr |= (SPI_WRITE)|(SPI_VDM);
 	
-	initSPI(SPI_BaudRatePrescaler_32);
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	//printUSART2("Write into buffer\n");
-	for(uint8_t i = 0; i<len; i++) {
+	for(uint8_t i=0;i<len;i++) {
 		txSPI(pBuff[i]);
-		//printUSART2("%x", pBuff[i]);
 	}
-	//printUSART2("\n");
 	SPI_HIGH;
 }
 
 void readBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {
 	addr |= (SPI_READ)|(SPI_VDM);
-	initSPI(SPI_BaudRatePrescaler_32);
+	
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	//printUSART2("Read buffer\n");
-	for(uint8_t i = 0; i<len; i++) {
+	for(uint8_t i=0;i<len;i++) {
 		pBuff[i] = rxSPI();
-		//printUSART2("%c", pBuff[i]);
 	}
-	//printUSART2("\n");
 	SPI_HIGH;
+}
+
+uint16_t getSn_PORT(uint8_t sn) {
+	uint16_t tmp = 0;
+	uint16_t tmp1 = 0;
+	tmp1 = ((uint16_t)readReg(Sn_PORT(sn)) << 8);
+	tmp = tmp1 + readReg(W5500_OFFSET_INC(Sn_PORT(sn),1));
+	return tmp;	
 }
 
 uint16_t getSn_TX_FSR(uint8_t sn) {
@@ -140,14 +137,12 @@ void recvData(uint8_t sn, uint8_t * data, uint16_t len) {
 }
 
 uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
-{
-   CHECK_SOCKNUM();
-   CHECK_SOCKMODE(Sn_MR_TCP);
-   CHECK_SOCKINIT();
-   
+{  
 	if(port == 0) return SOCKERR_PORTZERO;
+	setSn_MR(sn, Sn_MR_TCP);
 	setSn_DIPR(sn,addr);
 	setSn_DPORT(sn,port);
+	setSn_CR(sn,Sn_CR_OPEN);
 	setSn_CR(sn,Sn_CR_CONNECT);
    while(getSn_CR(sn));
    if(sock_io_mode & (1<<sn)) return SOCK_BUSY;
@@ -171,9 +166,6 @@ uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
 
 int8_t listen(uint8_t sn)
 {
-	CHECK_SOCKNUM();
-	CHECK_SOCKMODE(Sn_MR_TCP);
-	CHECK_SOCKINIT();
 	setSn_CR(sn,Sn_CR_LISTEN);
 	while(getSn_CR(sn));
    

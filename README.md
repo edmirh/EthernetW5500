@@ -48,7 +48,8 @@ server.listen(8080);
 <p>HTML code is included in this repository, named <i>index.html</i>.</p>
 
 <h3>Useful links<h3>
-<a href="https://www.st.com/resource/en/reference_manual/dm00031020-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf">STM32F407 Reference manual</a><br>
-<a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Shields/W5500_datasheet_v1.0.2_1.pdf">W5500 datasheet</a> <br>
-<a href="https://socket.io/">Socket.IO</a> <br>
-	
+<ul>
+<li><a href="https://www.st.com/resource/en/reference_manual/dm00031020-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf">STM32F407 Reference manual</a></li>
+<li><a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Shields/W5500_datasheet_v1.0.2_1.pdf">W5500 datasheet</a></li>
+<li><a href="https://socket.io/">Socket.IO</a> </li>
+</ul>	

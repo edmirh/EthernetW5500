@@ -8,4 +8,4 @@
 
 <p>After wiring, connect W5500 and your Notebook or PC with xTP cable, in <i>main.c</i> file you can change IP address of W5500 chip, and destination(notebook) IP, and PORT. Now you can flash <i>.hex</i> file on your microcontroller, and test all configuration using <i>NetCat(nc)</i> like shown on image:</p>
 
-<img width="500" height="255" src="https://i.imgur.com/lhSkVTK.png" style="text-align: center;"></img>
+<img width="100%" height="550" src="https://i.imgur.com/lhSkVTK.png" style="text-align: center;"></img>

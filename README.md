@@ -6,6 +6,12 @@
 
 <img width="500" height="255" src="https://i.imgur.com/QlB0E7p.png" style="text-align: center;"></img>
 
-<p>After wiring, connect W5500 and your Notebook or PC with xTP cable, in <i>main.c</i> file you can change IP address of W5500 chip, and destination(notebook) IP, and PORT. Now you can flash <i>.hex</i> file on your microcontroller, and test all configuration using <i>NetCat(nc)</i> like shown on image:</p>
+<p>After wiring, connect W5500 and your Notebook or PC with xTP cable, in <i>main.c</i> file you can change IP address of W5500 chip, and destination(notebook) IP, and PORT. Now you can flash <i>.hex</i> file on your microcontroller, and test all configuration using <i>NetCat(command: nc -l 5000)</i> like shown on image:</p>
 
 <img width="100%" height="550" src="https://i.imgur.com/lhSkVTK.png" style="text-align: center;"></img>
+
+<h3>Connecting W5500 with NodeJS, showing data on website</h3>
+<p>Before all, you need to install NodeJS with modules:</p>
+<pre>npm i express http socket.io net</pre>
+
+<p>I used Socket.IO for realtime reading, and showing data from an socket. You can find NodeJS and HTML configuration inside <i>server</i> folder.</p>

@@ -43,7 +43,7 @@ initSPI:
 	ldr	r3, .L4+4
 	.loc 1 13 15 view .LVU5
 	ldr	r1, [r4, #48]
-	.loc 1 27 12 view .LVU6
+	.loc 1 26 12 view .LVU6
 	ldr	r2, .L4+8
 	.loc 1 13 15 view .LVU7
 	orr	r1, r1, #2
@@ -69,66 +69,66 @@ initSPI:
 	ldr	r1, [r3, #8]
 	orr	r1, r1, #-1476395008
 	str	r1, [r3, #8]
-	.loc 1 20 2 is_stmt 1 view .LVU16
-	.loc 1 20 15 is_stmt 0 view .LVU17
+	.loc 1 19 2 is_stmt 1 view .LVU16
+	.loc 1 19 15 is_stmt 0 view .LVU17
 	ldr	r1, [r3]
 	bic	r1, r1, #50331648
 	str	r1, [r3]
-	.loc 1 21 2 is_stmt 1 view .LVU18
-	.loc 1 21 15 is_stmt 0 view .LVU19
+	.loc 1 20 2 is_stmt 1 view .LVU18
+	.loc 1 20 15 is_stmt 0 view .LVU19
 	ldr	r1, [r3]
 	orr	r1, r1, #16777216
 	str	r1, [r3]
-	.loc 1 22 2 is_stmt 1 view .LVU20
-	.loc 1 22 16 is_stmt 0 view .LVU21
+	.loc 1 21 2 is_stmt 1 view .LVU20
+	.loc 1 21 16 is_stmt 0 view .LVU21
 	ldr	r1, [r3, #4]
 	bic	r1, r1, #50331648
 	str	r1, [r3, #4]
-	.loc 1 23 2 is_stmt 1 view .LVU22
-	.loc 1 23 17 is_stmt 0 view .LVU23
+	.loc 1 22 2 is_stmt 1 view .LVU22
+	.loc 1 22 17 is_stmt 0 view .LVU23
 	ldr	r1, [r3, #8]
 	orr	r1, r1, #33554432
 	str	r1, [r3, #8]
-	.loc 1 24 2 is_stmt 1 view .LVU24
+	.loc 1 23 2 is_stmt 1 view .LVU24
 	ldr	r1, [r3, #20]
 	orr	r1, r1, #4096
 	str	r1, [r3, #20]
-	.loc 1 24 10 view .LVU25
-	.loc 1 26 2 view .LVU26
-	.loc 1 26 15 is_stmt 0 view .LVU27
+	.loc 1 23 10 view .LVU25
+	.loc 1 25 2 view .LVU26
+	.loc 1 25 15 is_stmt 0 view .LVU27
 	ldr	r3, [r4, #64]
-	.loc 1 27 12 view .LVU28
+	.loc 1 26 12 view .LVU28
 	movs	r1, #4
-	.loc 1 26 15 view .LVU29
+	.loc 1 25 15 view .LVU29
 	orr	r3, r3, #16384
 	str	r3, [r4, #64]
-	.loc 1 27 2 is_stmt 1 view .LVU30
-	.loc 1 27 12 is_stmt 0 view .LVU31
+	.loc 1 26 2 is_stmt 1 view .LVU30
+	.loc 1 26 12 is_stmt 0 view .LVU31
 	strh	r1, [r2]	@ movhi
-	.loc 1 28 2 is_stmt 1 view .LVU32
-	.loc 1 28 12 is_stmt 0 view .LVU33
+	.loc 1 27 2 is_stmt 1 view .LVU32
+	.loc 1 27 12 is_stmt 0 view .LVU33
 	ldrh	r3, [r2]
-	.loc 1 32 1 view .LVU34
+	.loc 1 31 1 view .LVU34
 	ldr	r4, [sp], #4
 	.cfi_restore 4
 	.cfi_def_cfa_offset 0
-	.loc 1 28 12 view .LVU35
+	.loc 1 27 12 view .LVU35
 	uxth	r3, r3
 	orr	r3, r3, #768
 	strh	r3, [r2]	@ movhi
-	.loc 1 30 2 is_stmt 1 view .LVU36
-	.loc 1 30 12 is_stmt 0 view .LVU37
+	.loc 1 29 2 is_stmt 1 view .LVU36
+	.loc 1 29 12 is_stmt 0 view .LVU37
 	ldrh	r3, [r2]
 	uxth	r3, r3
 	orrs	r3, r3, r0
 	strh	r3, [r2]	@ movhi
-	.loc 1 31 2 is_stmt 1 view .LVU38
-	.loc 1 31 12 is_stmt 0 view .LVU39
+	.loc 1 30 2 is_stmt 1 view .LVU38
+	.loc 1 30 12 is_stmt 0 view .LVU39
 	ldrh	r3, [r2]
 	uxth	r3, r3
 	orr	r3, r3, #64
 	strh	r3, [r2]	@ movhi
-	.loc 1 32 1 view .LVU40
+	.loc 1 31 1 view .LVU40
 	bx	lr
 .L5:
 	.align	2
@@ -149,54 +149,54 @@ initSPI:
 	.type	rxSPI, %function
 rxSPI:
 .LFB111:
-	.loc 1 35 1 is_stmt 1 view -0
+	.loc 1 34 1 is_stmt 1 view -0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	.loc 1 36 2 view .LVU42
-	.loc 1 38 2 view .LVU43
-	.loc 1 38 11 is_stmt 0 view .LVU44
+	.loc 1 35 2 view .LVU42
+	.loc 1 37 2 view .LVU43
+	.loc 1 37 11 is_stmt 0 view .LVU44
 	ldr	r2, .L15
 	movs	r3, #0
 	strh	r3, [r2, #12]	@ movhi
-	.loc 1 39 2 is_stmt 1 view .LVU45
+	.loc 1 38 2 is_stmt 1 view .LVU45
 .L7:
-	.loc 1 39 39 discriminator 1 view .LVU46
-	.loc 1 39 7 discriminator 1 view .LVU47
-	.loc 1 39 14 is_stmt 0 discriminator 1 view .LVU48
+	.loc 1 38 39 discriminator 1 view .LVU46
+	.loc 1 38 7 discriminator 1 view .LVU47
+	.loc 1 38 14 is_stmt 0 discriminator 1 view .LVU48
 	ldrh	r3, [r2, #8]
-	.loc 1 39 7 discriminator 1 view .LVU49
+	.loc 1 38 7 discriminator 1 view .LVU49
 	lsls	r0, r3, #30
 	bpl	.L7
-	.loc 1 40 14 view .LVU50
+	.loc 1 39 14 view .LVU50
 	ldr	r2, .L15
 .L8:
-	.loc 1 40 40 is_stmt 1 discriminator 1 view .LVU51
-	.loc 1 40 7 discriminator 1 view .LVU52
-	.loc 1 40 14 is_stmt 0 discriminator 1 view .LVU53
+	.loc 1 39 40 is_stmt 1 discriminator 1 view .LVU51
+	.loc 1 39 7 discriminator 1 view .LVU52
+	.loc 1 39 14 is_stmt 0 discriminator 1 view .LVU53
 	ldrh	r3, [r2, #8]
-	.loc 1 40 7 discriminator 1 view .LVU54
+	.loc 1 39 7 discriminator 1 view .LVU54
 	lsls	r1, r3, #31
 	bpl	.L8
-	.loc 1 41 12 view .LVU55
+	.loc 1 40 12 view .LVU55
 	ldr	r2, .L15
 .L9:
-	.loc 1 41 36 is_stmt 1 discriminator 1 view .LVU56
-	.loc 1 41 7 discriminator 1 view .LVU57
-	.loc 1 41 12 is_stmt 0 discriminator 1 view .LVU58
+	.loc 1 40 36 is_stmt 1 discriminator 1 view .LVU56
+	.loc 1 40 7 discriminator 1 view .LVU57
+	.loc 1 40 12 is_stmt 0 discriminator 1 view .LVU58
 	ldrh	r3, [r2, #8]
-	.loc 1 41 7 discriminator 1 view .LVU59
+	.loc 1 40 7 discriminator 1 view .LVU59
 	lsls	r3, r3, #24
 	bmi	.L9
-	.loc 1 42 2 is_stmt 1 view .LVU60
-	.loc 1 42 13 is_stmt 0 view .LVU61
+	.loc 1 41 2 is_stmt 1 view .LVU60
+	.loc 1 41 13 is_stmt 0 view .LVU61
 	ldrh	r0, [r2, #12]
 .LVL1:
-	.loc 1 44 2 is_stmt 1 view .LVU62
-	.loc 1 45 1 is_stmt 0 view .LVU63
+	.loc 1 43 2 is_stmt 1 view .LVU62
+	.loc 1 44 1 is_stmt 0 view .LVU63
 	uxtb	r0, r0
-	.loc 1 45 1 view .LVU64
+	.loc 1 44 1 view .LVU64
 	bx	lr
 .L16:
 	.align	2
@@ -216,54 +216,54 @@ rxSPI:
 txSPI:
 .LVL2:
 .LFB112:
-	.loc 1 48 1 is_stmt 1 view -0
+	.loc 1 47 1 is_stmt 1 view -0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	.loc 1 49 2 view .LVU66
-	.loc 1 51 2 view .LVU67
-	.loc 1 51 11 is_stmt 0 view .LVU68
+	.loc 1 48 2 view .LVU66
+	.loc 1 50 2 view .LVU67
+	.loc 1 50 11 is_stmt 0 view .LVU68
 	ldr	r2, .L26
 	strh	r0, [r2, #12]	@ movhi
-	.loc 1 52 2 is_stmt 1 view .LVU69
+	.loc 1 51 2 is_stmt 1 view .LVU69
 .LVL3:
 .L18:
-	.loc 1 52 39 discriminator 1 view .LVU70
-	.loc 1 52 7 discriminator 1 view .LVU71
-	.loc 1 52 14 is_stmt 0 discriminator 1 view .LVU72
+	.loc 1 51 39 discriminator 1 view .LVU70
+	.loc 1 51 7 discriminator 1 view .LVU71
+	.loc 1 51 14 is_stmt 0 discriminator 1 view .LVU72
 	ldrh	r3, [r2, #8]
-	.loc 1 52 7 discriminator 1 view .LVU73
+	.loc 1 51 7 discriminator 1 view .LVU73
 	lsls	r0, r3, #30
 	bpl	.L18
-	.loc 1 53 14 view .LVU74
+	.loc 1 52 14 view .LVU74
 	ldr	r2, .L26
 .L19:
-	.loc 1 53 40 is_stmt 1 discriminator 1 view .LVU75
-	.loc 1 53 7 discriminator 1 view .LVU76
-	.loc 1 53 14 is_stmt 0 discriminator 1 view .LVU77
+	.loc 1 52 40 is_stmt 1 discriminator 1 view .LVU75
+	.loc 1 52 7 discriminator 1 view .LVU76
+	.loc 1 52 14 is_stmt 0 discriminator 1 view .LVU77
 	ldrh	r3, [r2, #8]
-	.loc 1 53 7 discriminator 1 view .LVU78
+	.loc 1 52 7 discriminator 1 view .LVU78
 	lsls	r1, r3, #31
 	bpl	.L19
-	.loc 1 54 12 view .LVU79
+	.loc 1 53 12 view .LVU79
 	ldr	r2, .L26
 .L20:
-	.loc 1 54 36 is_stmt 1 discriminator 1 view .LVU80
-	.loc 1 54 7 discriminator 1 view .LVU81
-	.loc 1 54 12 is_stmt 0 discriminator 1 view .LVU82
+	.loc 1 53 36 is_stmt 1 discriminator 1 view .LVU80
+	.loc 1 53 7 discriminator 1 view .LVU81
+	.loc 1 53 12 is_stmt 0 discriminator 1 view .LVU82
 	ldrh	r3, [r2, #8]
-	.loc 1 54 7 discriminator 1 view .LVU83
+	.loc 1 53 7 discriminator 1 view .LVU83
 	lsls	r3, r3, #24
 	bmi	.L20
-	.loc 1 55 2 is_stmt 1 view .LVU84
-	.loc 1 55 12 is_stmt 0 view .LVU85
+	.loc 1 54 2 is_stmt 1 view .LVU84
+	.loc 1 54 12 is_stmt 0 view .LVU85
 	ldrh	r0, [r2, #12]
 .LVL4:
-	.loc 1 57 2 is_stmt 1 view .LVU86
-	.loc 1 58 1 is_stmt 0 view .LVU87
+	.loc 1 56 2 is_stmt 1 view .LVU86
+	.loc 1 57 1 is_stmt 0 view .LVU87
 	uxtb	r0, r0
-	.loc 1 58 1 view .LVU88
+	.loc 1 57 1 view .LVU88
 	bx	lr
 .L27:
 	.align	2
@@ -272,6 +272,262 @@ txSPI:
 	.cfi_endproc
 .LFE112:
 	.size	txSPI, .-txSPI
+	.align	1
+	.p2align 2,,3
+	.global	initSPI1
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv4-sp-d16
+	.type	initSPI1, %function
+initSPI1:
+.LVL5:
+.LFB113:
+	.loc 1 62 1 is_stmt 1 view -0
+	.cfi_startproc
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	@ link register save eliminated.
+	.loc 1 72 2 view .LVU90
+	.loc 1 72 15 is_stmt 0 view .LVU91
+	ldr	r1, .L30
+	.loc 1 78 15 view .LVU92
+	ldr	r3, .L30+4
+	.loc 1 84 12 view .LVU93
+	ldr	r2, .L30+8
+	.loc 1 62 1 view .LVU94
+	push	{r4, r5}
+	.cfi_def_cfa_offset 8
+	.cfi_offset 4, -8
+	.cfi_offset 5, -4
+	.loc 1 72 15 view .LVU95
+	ldr	r5, [r1, #48]
+	.loc 1 73 15 view .LVU96
+	ldr	r4, .L30+12
+	.loc 1 72 15 view .LVU97
+	orr	r5, r5, #1
+	str	r5, [r1, #48]
+	.loc 1 73 2 is_stmt 1 view .LVU98
+	.loc 1 73 15 is_stmt 0 view .LVU99
+	ldr	r5, [r4]
+	orr	r5, r5, #43008
+	str	r5, [r4]
+	.loc 1 74 2 is_stmt 1 view .LVU100
+	.loc 1 74 16 is_stmt 0 view .LVU101
+	ldr	r5, [r4, #32]
+	orr	r5, r5, #1426063360
+	orr	r5, r5, #5242880
+	str	r5, [r4, #32]
+	.loc 1 75 2 is_stmt 1 view .LVU102
+	.loc 1 75 17 is_stmt 0 view .LVU103
+	ldr	r5, [r4, #8]
+	orr	r5, r5, #43008
+	str	r5, [r4, #8]
+	.loc 1 77 2 is_stmt 1 view .LVU104
+	.loc 1 77 15 is_stmt 0 view .LVU105
+	ldr	r4, [r1, #48]
+	orr	r4, r4, #16
+	str	r4, [r1, #48]
+	.loc 1 78 2 is_stmt 1 view .LVU106
+	.loc 1 78 15 is_stmt 0 view .LVU107
+	ldr	r4, [r3]
+	orr	r4, r4, #64
+	str	r4, [r3]
+	.loc 1 79 2 is_stmt 1 view .LVU108
+	.loc 1 79 16 is_stmt 0 view .LVU109
+	ldr	r4, [r3, #4]
+	bic	r4, r4, #8
+	str	r4, [r3, #4]
+	.loc 1 80 2 is_stmt 1 view .LVU110
+	.loc 1 80 17 is_stmt 0 view .LVU111
+	ldr	r4, [r3, #8]
+	orr	r4, r4, #128
+	str	r4, [r3, #8]
+	.loc 1 81 2 is_stmt 1 view .LVU112
+	ldr	r4, [r3, #20]
+	orr	r4, r4, #8
+	str	r4, [r3, #20]
+	.loc 1 81 14 view .LVU113
+	.loc 1 83 2 view .LVU114
+	.loc 1 83 15 is_stmt 0 view .LVU115
+	ldr	r3, [r1, #68]
+	.loc 1 84 12 view .LVU116
+	movs	r4, #4
+	.loc 1 83 15 view .LVU117
+	orr	r3, r3, #4096
+	str	r3, [r1, #68]
+	.loc 1 84 2 is_stmt 1 view .LVU118
+	.loc 1 84 12 is_stmt 0 view .LVU119
+	strh	r4, [r2]	@ movhi
+	.loc 1 85 2 is_stmt 1 view .LVU120
+	.loc 1 85 12 is_stmt 0 view .LVU121
+	ldrh	r3, [r2]
+	uxth	r3, r3
+	orr	r3, r3, #768
+	strh	r3, [r2]	@ movhi
+	.loc 1 87 2 is_stmt 1 view .LVU122
+	.loc 1 87 12 is_stmt 0 view .LVU123
+	ldrh	r3, [r2]
+	uxth	r3, r3
+	orrs	r3, r3, r0
+	strh	r3, [r2]	@ movhi
+	.loc 1 88 2 is_stmt 1 view .LVU124
+	.loc 1 88 12 is_stmt 0 view .LVU125
+	ldrh	r3, [r2]
+	uxth	r3, r3
+	orr	r3, r3, #64
+	.loc 1 89 1 view .LVU126
+	pop	{r4, r5}
+	.cfi_restore 5
+	.cfi_restore 4
+	.cfi_def_cfa_offset 0
+	.loc 1 88 12 view .LVU127
+	strh	r3, [r2]	@ movhi
+	.loc 1 89 1 view .LVU128
+	bx	lr
+.L31:
+	.align	2
+.L30:
+	.word	1073887232
+	.word	1073876992
+	.word	1073819648
+	.word	1073872896
+	.cfi_endproc
+.LFE113:
+	.size	initSPI1, .-initSPI1
+	.align	1
+	.p2align 2,,3
+	.global	rxByteSPI1
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv4-sp-d16
+	.type	rxByteSPI1, %function
+rxByteSPI1:
+.LFB114:
+	.loc 1 92 1 is_stmt 1 view -0
+	.cfi_startproc
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	@ link register save eliminated.
+	.loc 1 93 2 view .LVU130
+	.loc 1 95 2 view .LVU131
+	.loc 1 95 11 is_stmt 0 view .LVU132
+	ldr	r2, .L41
+	movs	r3, #0
+	strh	r3, [r2, #12]	@ movhi
+	.loc 1 96 2 is_stmt 1 view .LVU133
+.L33:
+	.loc 1 96 39 discriminator 1 view .LVU134
+	.loc 1 96 7 discriminator 1 view .LVU135
+	.loc 1 96 14 is_stmt 0 discriminator 1 view .LVU136
+	ldrh	r3, [r2, #8]
+	.loc 1 96 7 discriminator 1 view .LVU137
+	lsls	r0, r3, #30
+	bpl	.L33
+	.loc 1 97 14 view .LVU138
+	ldr	r2, .L41
+.L34:
+	.loc 1 97 40 is_stmt 1 discriminator 1 view .LVU139
+	.loc 1 97 7 discriminator 1 view .LVU140
+	.loc 1 97 14 is_stmt 0 discriminator 1 view .LVU141
+	ldrh	r3, [r2, #8]
+	.loc 1 97 7 discriminator 1 view .LVU142
+	lsls	r1, r3, #31
+	bpl	.L34
+	.loc 1 98 12 view .LVU143
+	ldr	r2, .L41
+.L35:
+	.loc 1 98 36 is_stmt 1 discriminator 1 view .LVU144
+	.loc 1 98 7 discriminator 1 view .LVU145
+	.loc 1 98 12 is_stmt 0 discriminator 1 view .LVU146
+	ldrh	r3, [r2, #8]
+	.loc 1 98 7 discriminator 1 view .LVU147
+	lsls	r3, r3, #24
+	bmi	.L35
+	.loc 1 99 2 is_stmt 1 view .LVU148
+	.loc 1 99 13 is_stmt 0 view .LVU149
+	ldrh	r0, [r2, #12]
+.LVL6:
+	.loc 1 101 2 is_stmt 1 view .LVU150
+	.loc 1 102 1 is_stmt 0 view .LVU151
+	uxtb	r0, r0
+	.loc 1 102 1 view .LVU152
+	bx	lr
+.L42:
+	.align	2
+.L41:
+	.word	1073819648
+	.cfi_endproc
+.LFE114:
+	.size	rxByteSPI1, .-rxByteSPI1
+	.align	1
+	.p2align 2,,3
+	.global	txByteSPI1
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv4-sp-d16
+	.type	txByteSPI1, %function
+txByteSPI1:
+.LVL7:
+.LFB115:
+	.loc 1 105 1 is_stmt 1 view -0
+	.cfi_startproc
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
+	@ link register save eliminated.
+	.loc 1 106 2 view .LVU154
+	.loc 1 108 2 view .LVU155
+	.loc 1 108 11 is_stmt 0 view .LVU156
+	ldr	r2, .L52
+	strh	r0, [r2, #12]	@ movhi
+	.loc 1 109 2 is_stmt 1 view .LVU157
+.LVL8:
+.L44:
+	.loc 1 109 39 discriminator 1 view .LVU158
+	.loc 1 109 7 discriminator 1 view .LVU159
+	.loc 1 109 14 is_stmt 0 discriminator 1 view .LVU160
+	ldrh	r3, [r2, #8]
+	.loc 1 109 7 discriminator 1 view .LVU161
+	lsls	r0, r3, #30
+	bpl	.L44
+	.loc 1 110 14 view .LVU162
+	ldr	r2, .L52
+.L45:
+	.loc 1 110 40 is_stmt 1 discriminator 1 view .LVU163
+	.loc 1 110 7 discriminator 1 view .LVU164
+	.loc 1 110 14 is_stmt 0 discriminator 1 view .LVU165
+	ldrh	r3, [r2, #8]
+	.loc 1 110 7 discriminator 1 view .LVU166
+	lsls	r1, r3, #31
+	bpl	.L45
+	.loc 1 111 12 view .LVU167
+	ldr	r2, .L52
+.L46:
+	.loc 1 111 36 is_stmt 1 discriminator 1 view .LVU168
+	.loc 1 111 7 discriminator 1 view .LVU169
+	.loc 1 111 12 is_stmt 0 discriminator 1 view .LVU170
+	ldrh	r3, [r2, #8]
+	.loc 1 111 7 discriminator 1 view .LVU171
+	lsls	r3, r3, #24
+	bmi	.L46
+	.loc 1 112 2 is_stmt 1 view .LVU172
+	.loc 1 112 12 is_stmt 0 view .LVU173
+	ldrh	r0, [r2, #12]
+.LVL9:
+	.loc 1 114 2 is_stmt 1 view .LVU174
+	.loc 1 115 1 is_stmt 0 view .LVU175
+	uxtb	r0, r0
+	.loc 1 115 1 view .LVU176
+	bx	lr
+.L53:
+	.align	2
+.L52:
+	.word	1073819648
+	.cfi_endproc
+.LFE115:
+	.size	txByteSPI1, .-txByteSPI1
 .Letext0:
 	.file 2 "/Users/user/msut/STM32F407/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
 	.file 3 "/Users/user/msut/STM32F407/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
@@ -280,15 +536,15 @@ txSPI:
 	.file 6 "../../../STM32F407/Libraries/CMSIS/ST/STM32F4xx/Include/stm32f4xx.h"
 	.section	.debug_info,"",%progbits
 .Ldebug_info0:
-	.4byte	0x519
+	.4byte	0x5b0
 	.2byte	0x4
 	.4byte	.Ldebug_abbrev0
 	.byte	0x4
 	.uleb128 0x1
-	.4byte	.LASF66
+	.4byte	.LASF69
 	.byte	0xc
-	.4byte	.LASF67
-	.4byte	.LASF68
+	.4byte	.LASF70
+	.4byte	.LASF71
 	.4byte	.Ltext0
 	.4byte	.Letext0-.Ltext0
 	.4byte	.Ldebug_line0
@@ -862,18 +1118,85 @@ txSPI:
 	.uleb128 0xe
 	.4byte	.LASF63
 	.byte	0x1
-	.byte	0x2f
+	.byte	0x68
 	.byte	0x9
 	.4byte	0x9b
-	.4byte	.LFB112
-	.4byte	.LFE112-.LFB112
+	.4byte	.LFB115
+	.4byte	.LFE115-.LFB115
 	.uleb128 0x1
 	.byte	0x9c
 	.4byte	0x4cc
 	.uleb128 0xf
 	.4byte	.LASF65
 	.byte	0x1
-	.byte	0x2f
+	.byte	0x68
+	.byte	0x1c
+	.4byte	0x9b
+	.4byte	.LLST4
+	.4byte	.LVUS4
+	.uleb128 0x10
+	.ascii	"tmp\000"
+	.byte	0x1
+	.byte	0x6a
+	.byte	0xa
+	.4byte	0x9b
+	.4byte	.LLST5
+	.4byte	.LVUS5
+	.byte	0
+	.uleb128 0xe
+	.4byte	.LASF64
+	.byte	0x1
+	.byte	0x5b
+	.byte	0x9
+	.4byte	0x9b
+	.4byte	.LFB114
+	.4byte	.LFE114-.LFB114
+	.uleb128 0x1
+	.byte	0x9c
+	.4byte	0x4fb
+	.uleb128 0x11
+	.4byte	.LASF65
+	.byte	0x1
+	.byte	0x5d
+	.byte	0xa
+	.4byte	0x9b
+	.4byte	.LLST3
+	.4byte	.LVUS3
+	.byte	0
+	.uleb128 0x12
+	.4byte	.LASF72
+	.byte	0x1
+	.byte	0x3d
+	.byte	0x6
+	.4byte	.LFB113
+	.4byte	.LFE113-.LFB113
+	.uleb128 0x1
+	.byte	0x9c
+	.4byte	0x520
+	.uleb128 0x13
+	.4byte	.LASF68
+	.byte	0x1
+	.byte	0x3d
+	.byte	0x18
+	.4byte	0xa7
+	.uleb128 0x1
+	.byte	0x50
+	.byte	0
+	.uleb128 0xe
+	.4byte	.LASF66
+	.byte	0x1
+	.byte	0x2e
+	.byte	0x9
+	.4byte	0x9b
+	.4byte	.LFB112
+	.4byte	.LFE112-.LFB112
+	.uleb128 0x1
+	.byte	0x9c
+	.4byte	0x563
+	.uleb128 0xf
+	.4byte	.LASF65
+	.byte	0x1
+	.byte	0x2e
 	.byte	0x17
 	.4byte	0x9b
 	.4byte	.LLST1
@@ -881,34 +1204,34 @@ txSPI:
 	.uleb128 0x10
 	.ascii	"tmp\000"
 	.byte	0x1
-	.byte	0x31
+	.byte	0x30
 	.byte	0xa
 	.4byte	0x9b
 	.4byte	.LLST2
 	.4byte	.LVUS2
 	.byte	0
 	.uleb128 0xe
-	.4byte	.LASF64
+	.4byte	.LASF67
 	.byte	0x1
-	.byte	0x22
+	.byte	0x21
 	.byte	0x9
 	.4byte	0x9b
 	.4byte	.LFB111
 	.4byte	.LFE111-.LFB111
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x4fb
+	.4byte	0x592
 	.uleb128 0x11
 	.4byte	.LASF65
 	.byte	0x1
-	.byte	0x24
+	.byte	0x23
 	.byte	0xa
 	.4byte	0x9b
 	.4byte	.LLST0
 	.4byte	.LVUS0
 	.byte	0
-	.uleb128 0x12
-	.4byte	.LASF69
+	.uleb128 0x14
+	.4byte	.LASF73
 	.byte	0x1
 	.byte	0x3
 	.byte	0x6
@@ -917,7 +1240,7 @@ txSPI:
 	.uleb128 0x1
 	.byte	0x9c
 	.uleb128 0x13
-	.4byte	.LASF70
+	.4byte	.LASF68
 	.byte	0x1
 	.byte	0x3
 	.byte	0x17
@@ -1220,6 +1543,8 @@ txSPI:
 	.uleb128 0x18
 	.uleb128 0x2117
 	.uleb128 0x19
+	.uleb128 0x1
+	.uleb128 0x13
 	.byte	0
 	.byte	0
 	.uleb128 0x13
@@ -1239,9 +1564,73 @@ txSPI:
 	.uleb128 0x18
 	.byte	0
 	.byte	0
+	.uleb128 0x14
+	.uleb128 0x2e
+	.byte	0x1
+	.uleb128 0x3f
+	.uleb128 0x19
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x39
+	.uleb128 0xb
+	.uleb128 0x27
+	.uleb128 0x19
+	.uleb128 0x11
+	.uleb128 0x1
+	.uleb128 0x12
+	.uleb128 0x6
+	.uleb128 0x40
+	.uleb128 0x18
+	.uleb128 0x2117
+	.uleb128 0x19
+	.byte	0
+	.byte	0
 	.byte	0
 	.section	.debug_loc,"",%progbits
 .Ldebug_loc0:
+.LVUS4:
+	.uleb128 0
+	.uleb128 .LVU158
+	.uleb128 .LVU158
+	.uleb128 0
+.LLST4:
+	.4byte	.LVL7-.Ltext0
+	.4byte	.LVL8-.Ltext0
+	.2byte	0x1
+	.byte	0x50
+	.4byte	.LVL8-.Ltext0
+	.4byte	.LFE115-.Ltext0
+	.2byte	0x4
+	.byte	0xf3
+	.uleb128 0x1
+	.byte	0x50
+	.byte	0x9f
+	.4byte	0
+	.4byte	0
+.LVUS5:
+	.uleb128 .LVU174
+	.uleb128 0
+.LLST5:
+	.4byte	.LVL9-.Ltext0
+	.4byte	.LFE115-.Ltext0
+	.2byte	0x1
+	.byte	0x50
+	.4byte	0
+	.4byte	0
+.LVUS3:
+	.uleb128 .LVU150
+	.uleb128 0
+.LLST3:
+	.4byte	.LVL6-.Ltext0
+	.4byte	.LFE114-.Ltext0
+	.2byte	0x1
+	.byte	0x50
+	.4byte	0
+	.4byte	0
 .LVUS1:
 	.uleb128 0
 	.uleb128 .LVU70
@@ -1304,6 +1693,8 @@ txSPI:
 	.ascii	"AHB2ENR\000"
 .LASF2:
 	.ascii	"short int\000"
+.LASF64:
+	.ascii	"rxByteSPI1\000"
 .LASF50:
 	.ascii	"BDCR\000"
 .LASF53:
@@ -1334,7 +1725,7 @@ txSPI:
 	.ascii	"long long int\000"
 .LASF22:
 	.ascii	"PUPDR\000"
-.LASF63:
+.LASF66:
 	.ascii	"txSPI\000"
 .LASF7:
 	.ascii	"long int\000"
@@ -1348,16 +1739,18 @@ txSPI:
 	.ascii	"APB2RSTR\000"
 .LASF3:
 	.ascii	"__uint8_t\000"
-.LASF67:
+.LASF70:
 	.ascii	"spi.c\000"
 .LASF23:
 	.ascii	"BSRRL\000"
 .LASF1:
 	.ascii	"unsigned char\000"
-.LASF68:
+.LASF71:
 	.ascii	"/Users/user/msut/STM32F407/examples/EthernetW5500\000"
 .LASF41:
 	.ascii	"APB2ENR\000"
+.LASF63:
+	.ascii	"txByteSPI1\000"
 .LASF0:
 	.ascii	"signed char\000"
 .LASF11:
@@ -1378,17 +1771,17 @@ txSPI:
 	.ascii	"CFGR\000"
 .LASF27:
 	.ascii	"PLLCFGR\000"
-.LASF70:
+.LASF68:
 	.ascii	"prescaler\000"
 .LASF5:
 	.ascii	"short unsigned int\000"
 .LASF47:
 	.ascii	"APB1LPENR\000"
-.LASF69:
+.LASF73:
 	.ascii	"initSPI\000"
 .LASF15:
 	.ascii	"int32_t\000"
-.LASF64:
+.LASF67:
 	.ascii	"rxSPI\000"
 .LASF62:
 	.ascii	"SPI_TypeDef\000"
@@ -1424,11 +1817,13 @@ txSPI:
 	.ascii	"AHB1ENR\000"
 .LASF6:
 	.ascii	"__int32_t\000"
+.LASF72:
+	.ascii	"initSPI1\000"
 .LASF29:
 	.ascii	"AHB1RSTR\000"
 .LASF26:
 	.ascii	"GPIO_TypeDef\000"
-.LASF66:
+.LASF69:
 	.ascii	"GNU C17 9.2.1 20191025 (release) [ARM/arm-9-branch "
 	.ascii	"revision 277599] -mlittle-endian -mthumb -mcpu=cort"
 	.ascii	"ex-m4 -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4"

@@ -24,8 +24,12 @@
 #define SPI_HIGH					GPIOB->ODR |= (0x1000);
 #define SPI_LOW						GPIOB->ODR &= ~(0x1000);
 
+#define SPI1_CS_HIGH					GPIOE->ODR |= (0x0008);
+#define SPI1_CS_LOW						GPIOE->ODR &= ~(0x0008);
+
 void 		initSPI(uint16_t prescaler);
 uint8_t 	rxSPI(void);
 uint8_t 	txSPI(uint8_t data);
-
+uint8_t 	rxByteSPI1(void);
+uint8_t 	txByteSPI1(uint8_t data);
 #endif 

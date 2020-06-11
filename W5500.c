@@ -46,27 +46,27 @@ void writeReg(uint32_t addr, uint8_t data) {
 	SPI_HIGH;
 }
 
-void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {
+void writeBuff(uint32_t addr, uint8_t * pBuff) {						//Write buffer on SPI frame
 	addr |= (SPI_WRITE)|(SPI_VDM);
 	
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	for(uint8_t i=0;i<len;i++) {
+	for(uint8_t i=0;i<sizeof(pBuff);i++) {
 		txSPI(pBuff[i]);
 	}
 	SPI_HIGH;
 }
 
-void readBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {
+void readBuff(uint32_t addr, uint8_t * pBuff) {							//Read buffer from SPI frame
 	addr |= (SPI_READ)|(SPI_VDM);
 	
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	for(uint8_t i=0;i<len;i++) {
+	for(uint8_t i=0;i<sizeof(pBuff);i++) {
 		pBuff[i] = rxSPI();
 	}
 	SPI_HIGH;
@@ -108,30 +108,30 @@ uint16_t getSn_RX_RSR(uint8_t sn) {
 	return val;
 }
 
-void sendData(uint8_t sn, uint8_t * data, uint16_t len) {
+void sendData(uint8_t sn, uint8_t * data) {								//Sending buffer data on socket
 	uint16_t ptr = 0;
 	uint32_t addrsel = 0;
 	
-	if(len == 0) return;
+	if(sizeof(data) == 0) return;
 	ptr = getSn_TX_WR(sn);
 	
 	addrsel = ((uint32_t)ptr << 8) + (W5500_TXBUF_BLOCK(sn) << 3);
 	
-	writeBuff(addrsel, data, len);
-	ptr += len;
+	writeBuff(addrsel, data);
+	ptr += sizeof(data);
 	setSn_TX_WR(sn, ptr);
 }
 
-void recvData(uint8_t sn, uint8_t * data, uint16_t len) {
+void recvData(uint8_t sn, uint8_t * data) {								//Recieving buffer data from socket
 	uint16_t ptr = 0;
 	uint32_t addrsel = 0;
 	
-	if(len == 0) return;
+	if(sizeof(data) == 0) return;
 	
-	addrsel = ((uint32_t)ptr << 8) + (W5500_RXBUF_BLOCK(sn) << 3);
+	addrsel = ((uint32_t)ptr << 8) + (W5500_RXBUF_BLOCK(sn) << 3);		//Address offset, and socket block
 	
-	readBuff(addrsel, data, len);
-	ptr += len;
+	readBuff(addrsel, data);
+	ptr += sizeof(data);
 	
 	setSn_RX_RD(sn, ptr);
 }
@@ -164,11 +164,14 @@ uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port)
    return SOCK_OK;
 }
 
-int8_t listen(uint8_t sn)
+int8_t listen(uint8_t sn, uint16_t port)
 {
 	setSn_MR(sn, Sn_MR_TCP);
+	setSn_PORT(sn, port);
 	setSn_CR(sn,Sn_CR_OPEN);
 	setSn_CR(sn,Sn_CR_LISTEN);
+	getSn_SR(sn);
+
 	while(getSn_CR(sn));
    
    while(getSn_SR(sn) != SOCK_LISTEN)
@@ -179,7 +182,7 @@ int8_t listen(uint8_t sn)
    return SOCK_OK;
 }
 
-int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
+int32_t send(uint8_t sn, uint8_t * buf)
 {
    uint8_t tmp=0;
    uint16_t freesize=0;
@@ -202,7 +205,7 @@ int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
       else return SOCK_BUSY;
    }
    freesize = getSn_TxMAX(sn);
-   if (len > freesize) len = freesize; // check size not to exceed MAX size.
+   
    while(1)
    {
       freesize = getSn_TX_FSR(sn);
@@ -212,29 +215,59 @@ int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
          close(sn);
          return SOCKERR_SOCKSTATUS;
       }
-      if( (sock_io_mode & (1<<sn)) && (len > freesize) ) return SOCK_BUSY;
-      if(len <= freesize) break;
+      if( (sock_io_mode & (1<<sn)) && (sizeof(buf) > freesize) ) return SOCK_BUSY;
+      if(sizeof(buf) <= freesize) break;
    }
-   sendData(sn, buf, len);
+   sendData(sn, buf);
    
    setSn_CR(sn,Sn_CR_SEND);
    while(getSn_CR(sn));
    sock_is_sending |= (1 << sn);
 
-   return (int32_t)len;
+   return (int32_t)sizeof(buf);
 }
+
+int32_t recieve(uint8_t sn, uint8_t * buff) {
+	uint8_t tmp = 0;
+	uint16_t freesize = 0;
+	tmp = getSn_CR(sn);
+	freesize = getSn_RxMAX(sn);
+	
+	while(1) {
+		freesize = getSn_RX_RSR(sn);
+		tmp = getSn_SR(sn);
+		if(tmp != SOCK_ESTABLISHED) {
+			if(tmp == SOCK_CLOSE_WAIT) {
+				if(freesize != 0) break;
+				else if(getSn_TX_FSR(sn) == getSn_TxMAX(sn)) {
+					close(sn);
+					return SOCKERR_SOCKSTATUS;
+				}
+			}
+			else {
+				close(sn);
+				return SOCKERR_SOCKSTATUS;
+			}
+		}
+		if( (sock_io_mode) & (1<<sn) && (freesize == 0) ) return SOCK_BUSY;
+		if(freesize != 0) break;
+	}
+	recvData(sn, buff);
+	
+	setSn_CR(sn, Sn_CR_RECV);
+	while(getSn_CR(sn));
+
+	return (int32_t)sizeof(buff);
+}
+
 
 int8_t close(uint8_t sn)
 {
 	CHECK_SOCKNUM();
 	setSn_CR(sn,Sn_CR_CLOSE);
-   /* wait to process the command... */
 	while( getSn_CR(sn) );
-	/* clear all interrupt of the socket. */
 	setSn_IR(sn, 0xFF);
-	//A20150401 : Release the sock_io_mode of socket n.
 	sock_io_mode &= ~(1<<sn);
-	//
 	sock_is_sending &= ~(1<<sn);
 	sock_remained_size[sn] = 0;
 	sock_pack_info[sn] = 0;

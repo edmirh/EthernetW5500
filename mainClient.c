@@ -1,7 +1,9 @@
 #include "stm32f4xx.h"
 #include "delay.h"
 #include "w5500.h"
+#include "lis302dl.h"
 #include "usart.h"
+#include "math.h"
 
 int main(void) {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
@@ -9,7 +11,6 @@ int main(void) {
 	GPIOD->OTYPER |= 0x00000000;
 	GPIOD->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR12_1;
 
-	
 	initUSART2(USART2_BAUDRATE_115200);
 	
 	///---------Variables for initialization, (COMMON REG)-----------///
@@ -21,32 +22,55 @@ int main(void) {
 	///--------Variables for socket connection, (SOCKET REG)---------///
 	uint8_t sn = 0x01;
 	uint8_t addr[4] = {192,168,0,119};
-	uint16_t port = 8080;
+	uint16_t port = 5000;
 	
 	///------------Variables for main program------------------------///
-	int tmp, init = 0;
+	#define LENGTH		11
+	int8_t accel_data[3];
+	int i = 1;
+	uint8_t status = 0x00;
+	int8_t sendD[LENGTH];
+	uint8_t dataa[4] = "data\n";
+	initW5500(gaddr, subnet, mac, saddr);
 	
-	#define LENGTH		12
+	initLIS302DL();
+	delay_ms(2000);
 	
-	uint8_t send[LENGTH] = "Hello World!";
-	uint8_t recv[LENGTH];
+	setSn_PORT(sn, port);
 	
-	init = initW5500(gaddr, subnet, mac, saddr);
-	tmp = connect(sn, addr, port);
-	
-	sendData(sn, send, 12);
-	recvData(sn, recv, 12);
-	printUSART2("Status Reg: %x\n", init);
-	printUSART2("Connection: %d\n", tmp);
-	printUSART2("Send data: ");
-	for(uint8_t i=0;i<(LENGTH);i++) {
-		printUSART2("%c", send[i]);
+	printUSART2("Connecting to %d.%d.%d.%d\n", addr[0], addr[1], addr[2], addr[3]);
+	status = connect(sn, addr, port);
+	if(status == 0x01) {
+		printUSART2("Connection: Established\n");		
+		send(sn, dataa);
+		//printUSART2("Write text for send: ");
+		while(1) {
+			getDataLIS302DL(accel_data);
+			
+			int8_t ax = (int8_t)accel_data[0];
+			int8_t ay = (int8_t)accel_data[1];
+			int8_t az = (int8_t)accel_data[2];
+			
+			int8_t rho = atanf(ax/sqrt(ay*ay + az*az))*180/3.14;
+			float phi = atanf(ay/sqrt(ax*ax + az*az))*180/3.14;
+			float theta = atanf(sqrt(ay*ay + ax*ax)/az)*180/3.14;
+		
+			printUSART2("-> LIS302: \tx[%f] \ty[%f] \tz[%f]\n",rho, phi, theta);	
+				
+			sendD[i] = i+48;//(int8_t)(rho);									//getcharUSART2();
+			//putcharUSART2(sendD[i]);
+			send(sn, sendD);
+			i++;
+			delay_ms(100);
+			if(i == (LENGTH)) {
+				i = 0;
+			}
+			//if(getcharUSART2() == '0')
+				//break;
+		}
 	}
-	printUSART2("\n");
-
-	printUSART2("Recieve data: ");
-	for(uint8_t i=0;i<(LENGTH);i++) {
-		printUSART2("%c", recv[i]);
+	else {
+		printUSART2("Not connected!\n");
 	}
-	printUSART2("\n");
 }
+

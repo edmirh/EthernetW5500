@@ -15,7 +15,7 @@
 #define W5500_OFFSET_INC(ADDR, N)    		(ADDR + (N<<8))
 
 //Common register block
-#define	MR	 		W5500_BASE + (0x0000 << 8) + (W5500_CR << 3) //This representing an SPI Frame, 16bits for address offset, and 8 bits for Common Reg
+#define	MR	 		W5500_BASE + (0x0000 << 8) + (W5500_CR << 3) 		//This representing an SPI Frame, 16bits for address offset, and 8 bits for Common Reg
 #define GAR         W5500_BASE + (0x0001 << 8) + (W5500_CR << 3)		
 #define SUBR		W5500_BASE + (0x0005 << 8) + (W5500_CR << 3)
 #define SHAR		W5500_BASE + (0x0009 << 8) + (W5500_CR << 3)		
@@ -31,15 +31,15 @@
 #define PHAR		W5500_BASE + (0x001E << 8) + (W5500_CR << 3)	
 
 #define setGAR(gar) \
-		writeBuff(GAR,gar,4)
+		writeBuff(GAR,gar)
 #define setSUBR(subr) \
-		writeBuff(SUBR,subr,4)
+		writeBuff(SUBR,subr)
 #define setSHAR(shar) \
-		writeBuff(SHAR,shar,4)
+		writeBuff(SHAR,shar)
 #define setSIPR(sipr) \
-		writeBuff(SIPR,sipr,4)
+		writeBuff(SIPR,sipr)
 #define getGAR(gar) \
-		readBuff(GAR,gar,4)
+		readBuff(GAR,gar)
 
 //Socket register block
 #define W5500_SREG(N)       (1+4*N)										//Socket register
@@ -69,6 +69,7 @@
 #define Sn_TX_RD(N)     W5500_BASE + (0x0022 << 8) + (W5500_SREG(N) << 3)
 #define Sn_TX_WR(N)     W5500_BASE + (0x0024 << 8) + (W5500_SREG(N) << 3)
 #define Sn_TXBUF_SIZE(N)   (W5500_BASE + (0x001F << 8) + (W5500_SREG(N) << 3))
+#define Sn_RXBUF_SIZE(N)   (W5500_BASE + (0x001E << 8) + (W5500_SREG(N) << 3))
 
 #define setSn_RX_RD(sn, rxrd) { \
 		writeReg(Sn_RX_RD(sn),   (uint8_t)(rxrd>>8)); \
@@ -113,16 +114,22 @@
 		writeReg(Sn_MR(sn), val)
 	
 #define setSn_DIPR(sn, dipr) \
-		writeBuff(Sn_DIPR(sn), dipr, 4)
+		writeBuff(Sn_DIPR(sn), dipr)
 
 #define getSn_DIPR(sn, dipr) \
-		readBuff(Sn_DIPR(sn), dipr, 4)
+		readBuff(Sn_DIPR(sn), dipr)
 
 #define getSn_TXBUF_SIZE(sn) \
 		readReg(Sn_TXBUF_SIZE(sn))
 
+#define getSn_RXBUF_SIZE(sn) \
+		readReg(Sn_RXBUF_SIZE(sn))
+
 #define getSn_TxMAX(sn) \
 		(((uint16_t)getSn_TXBUF_SIZE(sn)) << 10)	
+
+#define getSn_RxMAX(sn) \
+		(((uint16_t)getSn_RXBUF_SIZE(sn)) << 10)	
 
 //PHYCFGR register
 #define PHYCFGR            (W5500_BASE + (0x002E << 8) + (W5500_CR << 3))
@@ -147,28 +154,28 @@
 #define Sn_CR_SEND_KEEP              0x22
 
 //Socket status
-#define SOCKET                uint8_t  ///< SOCKET type define for legacy driver
+#define SOCKET                uint8_t  
 
-#define SOCK_OK               1        ///< Result is OK about socket process.
-#define SOCK_BUSY             0        ///< Socket is busy on processing the operation. Valid only Non-block IO Mode.
-#define SOCK_FATAL            -1000    ///< Result is fatal error about socket process.
+#define SOCK_OK               1        
+#define SOCK_BUSY             0       
+#define SOCK_FATAL            -1000    
 
 #define SOCK_ERROR            0        
-#define SOCKERR_SOCKNUM       (SOCK_ERROR + 1)     ///< Invalid socket number
-#define SOCKERR_SOCKOPT       (SOCK_ERROR + 2)     ///< Invalid socket option
-#define SOCKERR_SOCKINIT      (SOCK_ERROR + 3)     ///< Socket is not initialized or SIPR is Zero IP address when Sn_MR_TCP
-#define SOCKERR_SOCKCLOSED    (SOCK_ERROR + 4)     ///< Socket unexpectedly closed.
-#define SOCKERR_SOCKMODE      (SOCK_ERROR + 5)     ///< Invalid socket mode for socket operation.
-#define SOCKERR_SOCKFLAG      (SOCK_ERROR + 6)     ///< Invalid socket flag
-#define SOCKERR_SOCKSTATUS    (SOCK_ERROR + 7)     ///< Invalid socket status for socket operation.
-#define SOCKERR_ARG           (SOCK_ERROR + 10)    ///< Invalid argument.
-#define SOCKERR_PORTZERO      (SOCK_ERROR + 11)    ///< Port number is zero
-#define SOCKERR_IPINVALID     (SOCK_ERROR + 12)    ///< Invalid IP address
-#define SOCKERR_TIMEOUT       (SOCK_ERROR + 13)    ///< Timeout occurred
-#define SOCKERR_DATALEN       (SOCK_ERROR + 14)    ///< Data length is zero or greater than buffer max size.
-#define SOCKERR_BUFFER        (SOCK_ERROR + 15)    ///< Socket buffer is not enough for data communication.
+#define SOCKERR_SOCKNUM       (SOCK_ERROR + 1)     
+#define SOCKERR_SOCKOPT       (SOCK_ERROR + 2)     
+#define SOCKERR_SOCKINIT      (SOCK_ERROR + 3)     
+#define SOCKERR_SOCKCLOSED    (SOCK_ERROR + 4)     
+#define SOCKERR_SOCKMODE      (SOCK_ERROR + 5)     
+#define SOCKERR_SOCKFLAG      (SOCK_ERROR + 6)     
+#define SOCKERR_SOCKSTATUS    (SOCK_ERROR + 7)     
+#define SOCKERR_ARG           (SOCK_ERROR + 10)    
+#define SOCKERR_PORTZERO      (SOCK_ERROR + 11)    
+#define SOCKERR_IPINVALID     (SOCK_ERROR + 12)   
+#define SOCKERR_TIMEOUT       (SOCK_ERROR + 13)    
+#define SOCKERR_DATALEN       (SOCK_ERROR + 14)    
+#define SOCKERR_BUFFER        (SOCK_ERROR + 15)   
 
-#define SOCKFATAL_PACKLEN     (SOCK_FATAL - 1)     ///< Invalid packet length. Fatal Error.
+#define SOCKFATAL_PACKLEN     (SOCK_FATAL - 1)     
 #define Sn_IR_SENDOK                 0x10
 #define SOCK_CLOSE_WAIT              0x1C
 #define Sn_CR_OPEN                   0x01
@@ -209,14 +216,16 @@
 #define Sn_IR_TIMEOUT                0x08
 
 uint8_t initW5500(uint8_t * gaddr, uint8_t * subnet, uint8_t * mac, uint8_t * saddr);
-void writeReg(uint32_t addr, uint8_t data);							//SPI must be LOW for transmit data
-uint8_t readReg(uint32_t addr);								//SPI must be HIGH for transmit data
-void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len);
-void readBuff(uint32_t addr, uint8_t *pBuff, uint16_t len);
-void sendData(uint8_t sn, uint8_t * data, uint16_t len);
-void recvData(uint8_t sn, uint8_t * data, uint16_t len);
+void writeReg(uint32_t addr, uint8_t data);								//SPI must be LOW for transmit data
+uint8_t readReg(uint32_t addr);											//SPI must be HIGH for transmit data
+void writeBuff(uint32_t addr, uint8_t * pBuff);
+void readBuff(uint32_t addr, uint8_t *pBuff);
+void sendData(uint8_t sn, uint8_t * data);
+void recvData(uint8_t sn, uint8_t * data);
 uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port);
-int8_t listen(uint8_t sn);
+int8_t listen(uint8_t sn, uint16_t port);
 int8_t close(uint8_t sn);
+int32_t send(uint8_t sn, uint8_t * buf);
+int32_t recieve(uint8_t sn, uint8_t * buff);
 uint16_t getSn_PORT(uint8_t sn);
 #endif

@@ -4,4 +4,4 @@
 <h3>How to use?</h3>
 <p>First connect your microcontroller with Ethernet W5500 device, for this communication I used SPI Master/Slave communication protocol. Follow this wired diagram:</p>
 
-<img src="https://i.imgur.com/QlB0E7p.png"></img>
+<img width="500" height="255" src="https://i.imgur.com/QlB0E7p.png" style="text-align: center;"></img>

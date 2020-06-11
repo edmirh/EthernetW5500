@@ -1,9 +1,7 @@
 #include "stm32f4xx.h"
 #include "delay.h"
 #include "w5500.h"
-#include "lis302dl.h"
 #include "usart.h"
-#include "math.h"
 
 int main(void) {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
@@ -25,12 +23,11 @@ int main(void) {
 	uint16_t port = 5000;
 	
 	///------------Variables for main program------------------------///
-	#define LENGTH		7
+	#define LENGTH		18
 	int8_t accel_data[3];
 	int i = 0;
 	uint8_t status = 0x00;
-	uint8_t sendD[LENGTH];
-	uint8_t dataa[18] = "Configuration test";
+	uint8_t dataa[LENGTH] = "Configuration test";
 	initW5500(gaddr, subnet, mac, saddr);
 	
 	setSn_PORT(sn, port);

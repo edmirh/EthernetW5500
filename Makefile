@@ -10,7 +10,7 @@ STM_COMMON=../../../STM32F407
 # Put your source files here (or *.c, etc)
 SRCS = main.c 
 SRCS += system_stm32f4xx.c delay.c misc.c
-SRCS += w5500.c usart.c spi.c lis302dl.c
+SRCS += w5500.c usart.c spi.c
 
 
 # Normally you shouldn't need to change anything below this line!

@@ -31,15 +31,15 @@
 #define PHAR		W5500_BASE + (0x001E << 8) + (W5500_CR << 3)	
 
 #define setGAR(gar) \
-		writeBuff(GAR,gar)
+		writeBuff(GAR,gar, 4)
 #define setSUBR(subr) \
-		writeBuff(SUBR,subr)
+		writeBuff(SUBR,subr,4)
 #define setSHAR(shar) \
-		writeBuff(SHAR,shar)
+		writeBuff(SHAR,shar,4)
 #define setSIPR(sipr) \
-		writeBuff(SIPR,sipr)
+		writeBuff(SIPR,sipr,4)
 #define getGAR(gar) \
-		readBuff(GAR,gar)
+		readBuff(GAR,gar,4)
 
 //Socket register block
 #define W5500_SREG(N)       (1+4*N)										//Socket register
@@ -114,10 +114,10 @@
 		writeReg(Sn_MR(sn), val)
 	
 #define setSn_DIPR(sn, dipr) \
-		writeBuff(Sn_DIPR(sn), dipr)
+		writeBuff(Sn_DIPR(sn), dipr, 4)
 
 #define getSn_DIPR(sn, dipr) \
-		readBuff(Sn_DIPR(sn), dipr)
+		readBuff(Sn_DIPR(sn), dipr, 4)
 
 #define getSn_TXBUF_SIZE(sn) \
 		readReg(Sn_TXBUF_SIZE(sn))
@@ -218,14 +218,14 @@
 uint8_t initW5500(uint8_t * gaddr, uint8_t * subnet, uint8_t * mac, uint8_t * saddr);
 void writeReg(uint32_t addr, uint8_t data);								//SPI must be LOW for transmit data
 uint8_t readReg(uint32_t addr);											//SPI must be HIGH for transmit data
-void writeBuff(uint32_t addr, uint8_t * pBuff);
-void readBuff(uint32_t addr, uint8_t *pBuff);
-void sendData(uint8_t sn, uint8_t * data);
-void recvData(uint8_t sn, uint8_t * data);
+void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len);
+void readBuff(uint32_t addr, uint8_t *pBuff, uint16_t len);
+void sendData(uint8_t sn, uint8_t * data, uint16_t len);
+void recvData(uint8_t sn, uint8_t * data, uint16_t len);
 uint8_t connect(uint8_t sn, uint8_t * addr, uint16_t port);
 int8_t listen(uint8_t sn, uint16_t port);
 int8_t close(uint8_t sn);
-int32_t send(uint8_t sn, uint8_t * buf);
-int32_t recieve(uint8_t sn, uint8_t * buff);
+int32_t send(uint8_t sn, uint8_t * buf, uint16_t len);
+int32_t recieve(uint8_t sn, uint8_t * buff, uint16_t len);
 uint16_t getSn_PORT(uint8_t sn);
 #endif

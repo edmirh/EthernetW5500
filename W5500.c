@@ -46,27 +46,27 @@ void writeReg(uint32_t addr, uint8_t data) {
 	SPI_HIGH;
 }
 
-void writeBuff(uint32_t addr, uint8_t * pBuff) {						//Write buffer on SPI frame
+void writeBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {						//Write buffer on SPI frame
 	addr |= (SPI_WRITE)|(SPI_VDM);
 	
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	for(uint8_t i=0;i<sizeof(pBuff);i++) {
+	for(uint8_t i=0;i<len;i++) {
 		txSPI(pBuff[i]);
 	}
 	SPI_HIGH;
 }
 
-void readBuff(uint32_t addr, uint8_t * pBuff) {							//Read buffer from SPI frame
+void readBuff(uint32_t addr, uint8_t * pBuff, uint16_t len) {							//Read buffer from SPI frame
 	addr |= (SPI_READ)|(SPI_VDM);
 	
 	SPI_LOW;
 	txSPI((addr & 0x00FF0000) >> 16);
 	txSPI((addr & 0x0000FF00) >> 8);
 	txSPI((addr & 0x000000FF) >> 0);
-	for(uint8_t i=0;i<sizeof(pBuff);i++) {
+	for(uint8_t i=0;i<len;i++) {
 		pBuff[i] = rxSPI();
 	}
 	SPI_HIGH;
@@ -108,30 +108,30 @@ uint16_t getSn_RX_RSR(uint8_t sn) {
 	return val;
 }
 
-void sendData(uint8_t sn, uint8_t * data) {								//Sending buffer data on socket
+void sendData(uint8_t sn, uint8_t * data, uint16_t len) {								//Sending buffer data on socket
 	uint16_t ptr = 0;
 	uint32_t addrsel = 0;
 	
-	if(sizeof(data) == 0) return;
+	if(len == 0) return;
 	ptr = getSn_TX_WR(sn);
 	
 	addrsel = ((uint32_t)ptr << 8) + (W5500_TXBUF_BLOCK(sn) << 3);
 	
-	writeBuff(addrsel, data);
-	ptr += sizeof(data);
+	writeBuff(addrsel, data, len);
+	ptr += len;
 	setSn_TX_WR(sn, ptr);
 }
 
-void recvData(uint8_t sn, uint8_t * data) {								//Recieving buffer data from socket
+void recvData(uint8_t sn, uint8_t * data, uint16_t len) {								//Recieving buffer data from socket
 	uint16_t ptr = 0;
 	uint32_t addrsel = 0;
 	
-	if(sizeof(data) == 0) return;
+	if(len == 0) return;
 	
 	addrsel = ((uint32_t)ptr << 8) + (W5500_RXBUF_BLOCK(sn) << 3);		//Address offset, and socket block
 	
-	readBuff(addrsel, data);
-	ptr += sizeof(data);
+	readBuff(addrsel, data, len);
+	ptr += len;
 	
 	setSn_RX_RD(sn, ptr);
 }
@@ -182,7 +182,7 @@ int8_t listen(uint8_t sn, uint16_t port)
    return SOCK_OK;
 }
 
-int32_t send(uint8_t sn, uint8_t * buf)
+int32_t send(uint8_t sn, uint8_t * buf, uint16_t len)
 {
    uint8_t tmp=0;
    uint16_t freesize=0;
@@ -216,18 +216,18 @@ int32_t send(uint8_t sn, uint8_t * buf)
          return SOCKERR_SOCKSTATUS;
       }
       if( (sock_io_mode & (1<<sn)) && (sizeof(buf) > freesize) ) return SOCK_BUSY;
-      if(sizeof(buf) <= freesize) break;
+      if(len <= freesize) break;
    }
-   sendData(sn, buf);
+   sendData(sn, buf, len);
    
    setSn_CR(sn,Sn_CR_SEND);
    while(getSn_CR(sn));
    sock_is_sending |= (1 << sn);
 
-   return (int32_t)sizeof(buf);
+   return (int32_t)len;
 }
 
-int32_t recieve(uint8_t sn, uint8_t * buff) {
+int32_t recieve(uint8_t sn, uint8_t * buff, uint16_t len) {
 	uint8_t tmp = 0;
 	uint16_t freesize = 0;
 	tmp = getSn_CR(sn);
@@ -252,12 +252,12 @@ int32_t recieve(uint8_t sn, uint8_t * buff) {
 		if( (sock_io_mode) & (1<<sn) && (freesize == 0) ) return SOCK_BUSY;
 		if(freesize != 0) break;
 	}
-	recvData(sn, buff);
+	recvData(sn, buff, len);
 	
 	setSn_CR(sn, Sn_CR_RECV);
 	while(getSn_CR(sn));
 
-	return (int32_t)sizeof(buff);
+	return (int32_t)len;
 }
 
 

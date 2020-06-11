@@ -45,42 +45,4 @@ app.get('/', function (req, res) {
 server.listen(8080);
 </pre>
 
-<p>And HTML code:</p>
-<pre><!DOCTYPE html>
-<html>
-<head>
-<title>Reading sensor data</title>
-<style>
-    body {
-        width: 100%;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
-    }
-	#messages {
-		font-size: 20px:
-		font-weight: 400;
-		color: blue;
-		text-align: center;
-	}
-</style>
-</head>
-<body>
-
-<script src="socket.io/socket.io.js"></script>
-<script>
-	var socket = io.connect('//192.168.0.119:8080');
-	
-	socket.on('livedata', function(data) {
-		console.log(data.livedata);
-		document.getElementById('messages').innerHTML = data.livedata;
-	});	
-	socket.on('error', function() {console.error(arguments)});
-	socket.on('message', function() {console.log(arguments)});
-</script>	
-<div id="header">	
-	<h2>Reading sensor data from STM32F407 over Ethernet-W5500</h2>
-  <p id="messages"></p>
-</div>
-</body>
-</html>
-</pre>
+<p>HTML code is in this repository, named <i>index.html</i>.</p>

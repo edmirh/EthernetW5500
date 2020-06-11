@@ -21,7 +21,6 @@ var server = require("http").Server(app);
 var io = require("socket.io")(server);
 var net = require('net');
 
-
 var netServer = net.createServer(function(c) {
   console.log('client connected');
   
@@ -78,8 +77,6 @@ server.listen(8080);
 	socket.on('error', function() {console.error(arguments)});
 	socket.on('message', function() {console.log(arguments)});
 </script>	
-	
-	
 <div id="header">	
 	<h2>Reading sensor data from STM32F407 over Ethernet-W5500</h2>
   <p id="messages"></p>

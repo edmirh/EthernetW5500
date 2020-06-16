@@ -49,6 +49,11 @@ server.listen(8080);
 
 <p>HTML code is included in this repository, named <i>index.html</i>.</p>
 
+<h3>How it looks on front-end side</h3>
+<p>After succesfully socket connection, and web client-web server connection, data will be shown on browser, like on image:</p>
+
+<img width="100%" height="550" src="https://i.imgur.com/VqvYdUB.png"></img>
+
 <h3>Useful links<h3>
 <ul>
 <li><a href="https://www.st.com/resource/en/reference_manual/dm00031020-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf">STM32F407 Reference manual</a></li>

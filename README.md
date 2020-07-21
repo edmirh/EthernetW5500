@@ -6,7 +6,9 @@
 
 <img width="500" height="255" src="https://i.imgur.com/s1wkc1q.png"></img>
 
-<p>After wiring, connect W5500 and your Notebook or PC with xTP cable, in <i>main.c</i> file you can change IP address of W5500 chip, and destination(notebook) IP, and PORT. Now you can flash <i>.hex</i> file on your microcontroller, and test all configuration using <i>NetCat(command: nc -l 5000)</i> like shown on image:</p>
+<p>After wiring, connect W5500 and your Notebook or PC with xTP cable, in <i>main.c</i> file you can change IP address of W5500 chip, and destination(notebook) IP, and PORT. Now you can flash <i>.hex</i> file on your microcontroller, and test all configuration using <i>NetCat</i> like shown on image:</p>
+
+<pre>nc -l 5000</pre>
 
 <img width="100%" height="550" src="https://i.imgur.com/lhSkVTK.png"></img>
 
@@ -45,4 +47,16 @@ app.get('/', function (req, res) {
 server.listen(8080);
 </pre>
 
-<p>HTML code is in this repository, named <i>index.html</i>.</p>
+<p>HTML code is included in this repository, named <i>index.html</i>.</p>
+
+<h3>How it looks on front-end side</h3>
+<p>After succesfully socket connection, and web client-web server connection, data will be shown on browser, like on image:</p>
+
+<img width="100%" height="550" src="https://i.imgur.com/VqvYdUB.png"></img>
+
+<h3>Useful links<h3>
+<ul>
+<li><a href="https://www.st.com/resource/en/reference_manual/dm00031020-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf">STM32F407 Reference manual</a></li>
+<li><a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Shields/W5500_datasheet_v1.0.2_1.pdf">W5500 datasheet</a></li>
+<li><a href="https://socket.io/">Socket.IO</a> </li>
+</ul>	
